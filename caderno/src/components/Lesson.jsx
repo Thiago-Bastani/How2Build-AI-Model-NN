@@ -19,6 +19,17 @@ function Block({ block }) {
     case 'note':    return <div className="l-note"><InlineText text={block.text} /></div>;
     case 'warn':    return <div className="l-warn"><InlineText text={block.text} /></div>;
     case 'formula': return <div className="l-formula"><code>{block.text}</code></div>;
+    case 'formal':  return (
+      <div className="l-formal">
+        <span className="l-formal-label">notação formal</span>
+        <code className="l-formal-eq">{block.eq}</code>
+        {block.legend && (
+          <ul className="l-formal-legend">
+            {block.legend.map((item, i) => <li key={i}><InlineText text={item} /></li>)}
+          </ul>
+        )}
+      </div>
+    );
     case 'list':    return (
       <ul className="l-list">
         {block.items.map((item, i) => <li key={i}><InlineText text={item} /></li>)}
