@@ -1,15 +1,16 @@
 import { useState } from 'react';
-import tensores from '../../01_tensores.js?raw';
-import prepararDados from '../../02_preparar_dados.js?raw';
+import Lesson from './components/Lesson';
+import { tensores }      from './lessons/01-tensores';
+import { prepararDados } from './lessons/02-preparar-dados';
 import './App.css';
 
 const TABS = [
-  { id: 'tensores',      label: '01 — Tensores',       content: tensores },
-  { id: 'dados',         label: '02 — Preparar Dados',  content: prepararDados },
+  { id: '01', label: '01 — Tensores',        lesson: tensores },
+  { id: '02', label: '02 — Preparar Dados',  lesson: prepararDados },
 ];
 
 export default function App() {
-  const [active, setActive] = useState('tensores');
+  const [active, setActive] = useState('01');
   const tab = TABS.find(t => t.id === active);
 
   return (
@@ -30,7 +31,7 @@ export default function App() {
       </header>
 
       <main className="content">
-        <pre className="code-block"><code>{tab.content}</code></pre>
+        <Lesson blocks={tab.lesson} />
       </main>
     </div>
   );

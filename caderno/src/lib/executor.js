@@ -1,4 +1,8 @@
 import * as tf from '@tensorflow/tfjs';
+import '@tensorflow/tfjs-backend-cpu';
+
+await tf.setBackend('cpu');
+await tf.ready();
 
 function formatValue(val) {
   if (val === null) return 'null';
@@ -23,7 +27,7 @@ export async function executeCode(code) {
   console.log = capture;
 
   try {
-    const fn = new Function('tf', 'print', `"use strict"; return (async()=>{ ${code} })()`);
+    const fn = new Function('tf', 'print', `"use strict"; return (async()=>{\n${code}\n})()`);
     await fn(tf, capture);
     return { outputs, error: null };
   } catch (err) {
