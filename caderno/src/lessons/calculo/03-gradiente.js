@@ -1,3 +1,5 @@
+export const gradienteViz = ['gradiente'];
+
 export const gradiente = [
   { type: 'h1', text: 'Gradiente' },
   { type: 'p', text: 'A derivada funciona quando você tem um único botão pra girar. Uma rede neural tem milhares de botões — os pesos. O gradiente é a resposta pra: como girar todos os botões ao mesmo tempo, cada um na direção certa?' },

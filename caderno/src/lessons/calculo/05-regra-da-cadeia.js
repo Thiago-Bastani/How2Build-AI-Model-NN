@@ -1,3 +1,5 @@
+export const regraDaCadeiaViz = ['cadeia'];
+
 export const regraDaCadeia = [
   { type: 'h1', text: 'Regra da Cadeia' },
   { type: 'p', text: 'Você sabe que 1 dólar compra 5 reais. E que 1 real compra 3 pesos argentinos. Quanto 1 dólar compra em pesos?' },

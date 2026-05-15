@@ -1,3 +1,5 @@
+export const produtoMatrizesViz = ['produto-matriz'];
+
 export const produtoMatrizes = [
   { type: 'h1', text: 'Produto de Matrizes' },
   { type: 'p', text: 'Cada camada de uma rede neural faz uma operação. Essa operação é o produto de matrizes. Antes de aprender como calcular, vale entender **por que** ela existe.' },

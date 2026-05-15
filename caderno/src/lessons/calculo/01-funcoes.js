@@ -1,3 +1,5 @@
+export const funcoesViz = ['funcoes-custo'];
+
 export const funcoes = [
   { type: 'h1', text: 'Funções' },
   { type: 'p', text: 'Uma função é uma máquina. Você coloca algo, ela faz uma conta, devolve algo. Sempre a mesma conta, sempre o mesmo resultado pra mesma entrada.' },

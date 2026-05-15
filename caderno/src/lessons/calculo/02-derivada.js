@@ -1,3 +1,5 @@
+export const derivadaViz = ['derivada'];
+
 export const derivada = [
   { type: 'h1', text: 'Derivada' },
   { type: 'p', text: 'Você está de olhos vendados numa colina e quer chegar ao vale. Não dá pra ver nada — mas dá pra sentir o chão inclinando sob seus pés.' },
