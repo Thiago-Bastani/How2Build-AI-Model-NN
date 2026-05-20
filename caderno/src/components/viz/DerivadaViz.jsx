@@ -26,15 +26,26 @@ export default function DerivadaViz() {
   const slope = df(x);
   const y0 = f(x);
 
-  // Reta tangente: y = slope*(t-x) + y0, desenhada de x-1.5 a x+1.5
+  // Reta tangente: de x-1.5 a x+1.5, clampando em y
   const ext = 1.5;
   const tx1 = x - ext, ty1 = y0 - slope * ext;
   const tx2 = x + ext, ty2 = y0 + slope * ext;
 
   // Triângulo run/rise
-  const runU = 1;
+  const runU  = 1;
   const riseU = slope * runU;
-  const triangleVisible = y0 < yMax - 1 && Math.abs(riseU) > 0.1;
+  // Só mostra quando cabe: cabe em x e em y, e a inclinação é visível
+  const triangleVisible =
+    y0 < yMax - 1 &&
+    Math.abs(riseU) > 0.1 &&
+    x + runU < xMax &&
+    Math.abs(riseU) < yMax - y0 - 0.1;
+
+  // Label do rise: se ponta da linha vertical está perto da borda direita → flip esquerda
+  const riseLineX = sx(x + runU);
+  const riseLabelRight = riseLineX < W - PAD.right - 58;
+  const riseLabelX     = riseLabelRight ? riseLineX + 7 : riseLineX - 7;
+  const riseLabelAnchor = riseLabelRight ? 'start' : 'end';
 
   return (
     <div className="viz-card">
@@ -62,15 +73,17 @@ export default function DerivadaViz() {
         {/* Triângulo mostrando a inclinação */}
         {triangleVisible && (
           <g>
+            {/* Linha horizontal (run = 1) */}
             <line x1={sx(x)} y1={sy(y0)} x2={sx(x+runU)} y2={sy(y0)}
               stroke="#aaa" strokeWidth="1.5"/>
             <text x={sx(x + runU/2)} y={sy(y0)+13} fill="#666" fontSize="9" textAnchor="middle">andou 1</text>
+            {/* Linha vertical (rise) */}
             <line x1={sx(x+runU)} y1={sy(y0)} x2={sx(x+runU)} y2={sy(y0+riseU)}
               stroke="#f44336" strokeWidth="2.5"/>
             <text
-              x={sx(x+runU)+7} y={(sy(y0)+sy(y0+riseU))/2+4}
-              fill="#f44336" fontSize="9" fontWeight="bold">
-              {riseU > 0 ? `subiu ${riseU.toFixed(1)}` : `desceu ${Math.abs(riseU).toFixed(1)}`}
+              x={riseLabelX} y={(sy(y0)+sy(y0+riseU))/2+4}
+              fill="#f44336" fontSize="9" fontWeight="bold" textAnchor={riseLabelAnchor}>
+              {riseU > 0 ? `↑ subiu ${riseU.toFixed(1)}` : `↓ desceu ${Math.abs(riseU).toFixed(1)}`}
             </text>
           </g>
         )}
@@ -78,12 +91,12 @@ export default function DerivadaViz() {
         {/* Ponto */}
         <circle cx={sx(x)} cy={sy(y0)} r="5" fill="#f44336" stroke="#0c0c0c" strokeWidth="2"/>
 
-        {/* Label da derivada */}
-        <rect x={PAD.left+1} y={PAD.top+1} width={150} height={38} rx="5"
+        {/* Label da derivada — caixa com largura generosa */}
+        <rect x={PAD.left+1} y={PAD.top+1} width={148} height={38} rx="5"
           fill="#0c0c0c" stroke="#f44336" strokeWidth="1.5"/>
-        <text x={PAD.left+9} y={PAD.top+15} fill="#888" fontSize="9">inclinação da tangente</text>
-        <text x={PAD.left+9} y={PAD.top+30} fill="#f44336" fontSize="13" fontWeight="bold">
-          = {slope.toFixed(2)}  (a derivada aqui)
+        <text x={PAD.left+9} y={PAD.top+15} fill="#888" fontSize="9">inclinação da tangente:</text>
+        <text x={PAD.left+9} y={PAD.top+30} fill="#f44336" fontSize="12" fontWeight="bold">
+          f'({x.toFixed(1)}) = {slope.toFixed(2)}
         </text>
       </svg>
 

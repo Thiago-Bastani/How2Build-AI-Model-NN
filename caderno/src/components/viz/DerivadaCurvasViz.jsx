@@ -58,8 +58,8 @@ export default function DerivadaCurvasViz() {
           stroke="#4caf50" strokeWidth="1" strokeDasharray="3 2" opacity="0.6"/>
         <circle cx={sxFn(2)} cy={syTop(4,0,9)} r="4" fill="#4caf50"/>
         <circle cx={sxFn(2)} cy={syBot(4,-7,7)} r="4" fill="#4caf50"/>
-        <text x={sxFn(2)+5} y={syTop(4,0,9)-6} fill="#4caf50" fontSize="9">x=2: inclinação=4</text>
-        <text x={sxFn(2)+5} y={syBot(4,-7,7)+4} fill="#4caf50" fontSize="9">f'(2)=4 ✓</text>
+        <text x={sxFn(2)-6} y={syTop(4,0,9)-6} fill="#4caf50" fontSize="9" textAnchor="end">x=2: inclinação=4</text>
+        <text x={sxFn(2)-6} y={syBot(4,-7,7)+4} fill="#4caf50" fontSize="9" textAnchor="end">f'(2)=4 ✓</text>
       </svg>
     </div>
   );

@@ -103,13 +103,10 @@ Nunca:
 
 ## Regras para os desenhos (visualizações)
 
-### Lei principal: o desenho deve ser autoexplicativo
+### Lei principal: o desenho deve explicar exatamente o que há no texto
 
-O leitor bate o olho no gráfico e já entende o que está vendo — **sem precisar ler o texto ao lado**.
+Se o gráfico não tem nada a ver com o que o texto cita visualmente, está errado. Ex.: Função quadrática é usada por causa de sua curva (Grafico DEVE TER LEGENDA EXPLICANDO DO QUE SE TRATA AQUELA CURVA, EM QUAL COR ESTÁ, SETA APONTANDO PRA ELA, ETC. não adianta só colocar a função quadrática desenhada. tem que explicitar o que está escrito no texto.)
 
-Se você precisar do texto ao lado pra entender o gráfico, o gráfico está errado.
-
-Teste: cubra o texto da lição. O desenho sozinho ainda ensina o conceito? Se não, adicione labels.
 
 ---
 

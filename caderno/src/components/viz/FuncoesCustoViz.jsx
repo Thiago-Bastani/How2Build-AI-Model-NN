@@ -11,10 +11,9 @@ function sx(x) { return PAD.left + ((x - xMin) / (xMax - xMin)) * plotW; }
 function sy(y) { return PAD.top  + plotH - ((y - yMin) / (yMax - yMin)) * plotH; }
 
 const FUNCS = [
-  { id: 'quad',  label: 'f(x) = x²',      color: '#7c6af7', fn: x => x ** 2,           desc: 'Quadrática — curva em U' },
-  { id: 'lin',   label: 'f(x) = x + 1',   color: '#4fc3f7', fn: x => x + 1,            desc: 'Linear — linha reta' },
-  { id: 'exp',   label: 'f(x) = eˣ − 1',  color: '#f44336', fn: x => Math.E**x - 1,    desc: 'Exponencial — cresce cada vez mais rápido' },
-  { id: 'abs',   label: 'f(x) = |x|',     color: '#4caf50', fn: x => Math.abs(x),       desc: 'Valor absoluto — V' },
+  { id: 'quad', label: 'f(x) = x²',     color: '#7c6af7', fn: x => x ** 2,        desc: 'curva em U (parábola)' },
+  { id: 'lin',  label: 'f(x) = x + 1',  color: '#4fc3f7', fn: x => x + 1,         desc: 'linha reta — ritmo constante' },
+  { id: 'exp',  label: 'f(x) = eˣ − 1', color: '#f44336', fn: x => Math.E**x - 1, desc: 'devagar no início, explode no fim' },
 ];
 
 function makePath(fn) {
@@ -76,6 +75,49 @@ export default function FuncoesCustoViz() {
         <text x={PAD.left+10} y={PAD.top+29} fill="#555" fontSize="9">
           {cur.desc}
         </text>
+
+        {/* Anotações específicas por tipo */}
+        {active === 'quad' && (
+          <g>
+            <circle cx={sx(0)} cy={sy(0)} r="4" fill="#7c6af7"/>
+            <line x1={sx(0)} y1={sy(0)-6} x2={sx(0)} y2={sy(0)-22} stroke="#7c6af7" strokeWidth="1" strokeDasharray="3 2"/>
+            <text x={sx(0)} y={sy(0)-26} fill="#7c6af7" fontSize="9" textAnchor="middle">fundo do U</text>
+            <text x={sx(2.4)} y={sy(5.5)-10} fill="#7c6af7" fontSize="9" textAnchor="end">cresce</text>
+            <text x={sx(2.4)} y={sy(5.5)+1} fill="#7c6af7" fontSize="9" textAnchor="end">cada vez</text>
+            <text x={sx(2.4)} y={sy(5.5)+12} fill="#7c6af7" fontSize="9" textAnchor="end">mais rápido →</text>
+          </g>
+        )}
+        {active === 'lin' && (
+          <g>
+            {[[-2,-1],[0,1],[2,3]].map(([x,y],i) => (
+              <g key={i}>
+                <circle cx={sx(x)} cy={sy(y)} r="3" fill="#4fc3f7"/>
+                <line x1={sx(x-0.3)} y1={sy(y-0.3)} x2={sx(x+0.3)} y2={sy(y+0.3)}
+                  stroke="#4fc3f7" strokeWidth="1.5" opacity="0.4"/>
+              </g>
+            ))}
+            <text x={sx(1.5)} y={sy(2.5)+18} fill="#4fc3f7" fontSize="9" textAnchor="middle">
+              +1 em x → +1 em f(x)
+            </text>
+            <text x={sx(1.5)} y={sy(2.5)+29} fill="#4fc3f7" fontSize="9" textAnchor="middle">
+              ritmo constante
+            </text>
+          </g>
+        )}
+        {active === 'exp' && (
+          <g>
+            <text x={sx(-1.5)} y={sy(0.8)} fill="#f44336" fontSize="9">devagar</text>
+            <text x={sx(-1.5)} y={sy(0.8)+11} fill="#f44336" fontSize="9">aqui...</text>
+            <line x1={sx(1.8)} y1={sy(yMax-0.5)} x2={sx(2.2)} y2={sy(yMax-0.5)}
+              stroke="#f44336" strokeWidth="1.5" markerEnd="url(#expArr)"/>
+            <defs>
+              <marker id="expArr" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+                <path d="M0,0 L6,3 L0,6 Z" fill="#f44336"/>
+              </marker>
+            </defs>
+            <text x={W-PAD.right-3} y={sy(yMax-0.2)} fill="#f44336" fontSize="9" textAnchor="end">...explode aqui ↑</text>
+          </g>
+        )}
       </svg>
 
       {/* Botões de seleção */}
