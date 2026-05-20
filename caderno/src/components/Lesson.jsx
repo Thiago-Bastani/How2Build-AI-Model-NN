@@ -1,6 +1,20 @@
 import CodeBlock from './CodeBlock';
+import FuncoesCustoViz from './viz/FuncoesCustoViz';
+import DerivadaViz     from './viz/DerivadaViz';
+import GradienteViz    from './viz/GradienteViz';
+import MatrizViz       from './viz/MatrizViz';
+import CadeiaViz       from './viz/CadeiaViz';
+import DerivadaCurvasViz from './viz/DerivadaCurvasViz';
 
-// Transforma **negrito** e `codigo` em JSX
+const VIZ_MAP = {
+  'funcoes-custo':     FuncoesCustoViz,
+  'derivada':          DerivadaViz,
+  'derivada-curvas':   DerivadaCurvasViz,
+  'gradiente':         GradienteViz,
+  'produto-matriz':    MatrizViz,
+  'cadeia':            CadeiaViz,
+};
+
 function InlineText({ text }) {
   const parts = text.split(/(`[^`]+`|\*\*[^*]+\*\*)/g);
   return parts.map((p, i) => {
@@ -41,10 +55,45 @@ function Block({ block }) {
   }
 }
 
+// Cada segmento: blocos que ficam ao lado do viz que os acompanha.
+// O viz aparece à direita do texto que vem ANTES dele (quem o citou).
+function segmentBlocks(blocks) {
+  const segments = [];
+  let current = [];
+  for (const block of blocks) {
+    if (block.type === 'viz') {
+      // fecha o segmento atual junto com este viz
+      segments.push({ blocks: current, vizId: block.id });
+      current = [];
+    } else {
+      current.push(block);
+    }
+  }
+  // texto restante após o último viz (ou tudo se não houver viz)
+  if (current.length > 0) segments.push({ blocks: current, vizId: null });
+  return segments;
+}
+
 export default function Lesson({ blocks }) {
+  const segments = segmentBlocks(blocks);
+
   return (
-    <article className="lesson">
-      {blocks.map((block, i) => <Block key={i} block={block} />)}
-    </article>
+    <div className="lesson-outer">
+      {segments.map((seg, i) => {
+        const VizComp = seg.vizId ? VIZ_MAP[seg.vizId] : null;
+        return (
+          <div key={i} className={VizComp ? 'lesson-row' : 'lesson-row lesson-row--full'}>
+            <article className="lesson">
+              {seg.blocks.map((b, j) => <Block key={j} block={b} />)}
+            </article>
+            {VizComp && (
+              <div className="lesson-viz-col">
+                <VizComp />
+              </div>
+            )}
+          </div>
+        );
+      })}
+    </div>
   );
 }

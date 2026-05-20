@@ -148,9 +148,6 @@ body {
 .content {
   flex: 1;
   overflow-y: auto;
-  display: grid;
-  grid-template-columns: 1fr var(--viz-w);
-  align-items: start;
   min-width: 0;
 }
 
@@ -160,7 +157,33 @@ body {
 }
 
 /* ── Lesson Typography ───────────────────────────────────────── */
-.lesson { display: flex; flex-direction: column; gap: 20px; max-width: 720px; }
+/* Lesson layout */
+.lesson-outer {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.lesson-row {
+  display: grid;
+  grid-template-columns: 420px 1fr 440px 48px;
+  align-items: end;
+}
+
+.lesson-row--full {
+  display: block;
+}
+
+.lesson {
+  grid-column: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.lesson-viz-col {
+  grid-column: 3;
+}
 
 .l-h1 {
   font-size: 28px;

@@ -9,8 +9,8 @@ function dot(row, col) {
 }
 const C = A.map(row => B[0].map((_, j) => dot(row, B.map(r => r[j]))));
 
-const CELL = 36;
-const GAP  = 6;
+const CELL = 48;
+const GAP  = 8;
 
 function MatCell({ val, highlight, color }) {
   const bg = highlight ? (color || '#7c6af7') : '#1a1a1a';

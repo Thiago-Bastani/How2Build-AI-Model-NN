@@ -1,92 +1,96 @@
-// Visualização: L(ŷ) = (ŷ - y)²  →  parábola do custo
 import { useState } from 'react';
 
-const W = 300, H = 240;
-const PAD = 36;
-const real = 5; // valor real fixo
+const W = 300, H = 260;
+const PAD = { top: 20, right: 16, bottom: 32, left: 36 };
+const plotW = W - PAD.left - PAD.right;
+const plotH = H - PAD.top - PAD.bottom;
+const xMin = -3, xMax = 3;
+const yMin = -1, yMax = 9;
 
-const xMin = 0, xMax = 10;
-const yMin = 0, yMax = 25;
+function sx(x) { return PAD.left + ((x - xMin) / (xMax - xMin)) * plotW; }
+function sy(y) { return PAD.top  + plotH - ((y - yMin) / (yMax - yMin)) * plotH; }
 
-function sx(x) { return PAD + ((x - xMin) / (xMax - xMin)) * (W - PAD * 2); }
-function sy(y) { return H - PAD - ((y - yMin) / (yMax - yMin)) * (H - PAD * 2); }
+const FUNCS = [
+  { id: 'quad',  label: 'f(x) = x²',      color: '#7c6af7', fn: x => x ** 2,           desc: 'Quadrática — curva em U' },
+  { id: 'lin',   label: 'f(x) = x + 1',   color: '#4fc3f7', fn: x => x + 1,            desc: 'Linear — linha reta' },
+  { id: 'exp',   label: 'f(x) = eˣ − 1',  color: '#f44336', fn: x => Math.E**x - 1,    desc: 'Exponencial — cresce cada vez mais rápido' },
+  { id: 'abs',   label: 'f(x) = |x|',     color: '#4caf50', fn: x => Math.abs(x),       desc: 'Valor absoluto — V' },
+];
 
-function parabolaPath() {
+function makePath(fn) {
   const pts = [];
-  for (let i = 0; i <= 100; i++) {
-    const x = xMin + (i / 100) * (xMax - xMin);
-    const y = (x - real) ** 2;
-    if (y > yMax) continue;
-    pts.push(`${i === 0 ? 'M' : 'L'}${sx(x).toFixed(1)},${sy(y).toFixed(1)}`);
+  for (let i = 0; i <= 120; i++) {
+    const x = xMin + (i / 120) * (xMax - xMin);
+    const y = fn(x);
+    if (y < yMin - 1 || y > yMax + 1) { pts.push(null); continue; }
+    pts.push([sx(x), sy(Math.max(yMin, Math.min(yMax, y)))]);
   }
-  return pts.join(' ');
+  let d = '', pen = false;
+  for (const pt of pts) {
+    if (!pt) { pen = false; continue; }
+    d += (pen ? 'L' : 'M') + pt[0].toFixed(1) + ',' + pt[1].toFixed(1) + ' ';
+    pen = true;
+  }
+  return d;
 }
 
 export default function FuncoesCustoViz() {
-  const [guess, setGuess] = useState(2);
-  const loss = (guess - real) ** 2;
+  const [active, setActive] = useState('quad');
+  const cur = FUNCS.find(f => f.id === active);
 
   return (
     <div className="viz-card">
-      <div className="viz-title">Função de Custo  L(ŷ) = (ŷ − y)²</div>
-      <svg width={W} height={H} style={{ display: 'block' }}>
+      <div className="viz-title">Gráfico de Funções</div>
+
+      <svg width="100%" viewBox={`0 0 ${W} ${H}`}>
         {/* Grid */}
-        {[0, 5, 10, 15, 20, 25].map(v => (
-          <line key={v} x1={PAD} x2={W - PAD} y1={sy(v)} y2={sy(v)} stroke="#1e1e1e" strokeWidth="1" />
+        {[-1,0,1,2,3,4,5,6,7,8].filter(v => v >= yMin && v <= yMax).map(v => (
+          <line key={v} x1={PAD.left} x2={W-PAD.right} y1={sy(v)} y2={sy(v)} stroke="#181818" strokeWidth="1"/>
         ))}
-        {[0, 2, 4, 6, 8, 10].map(v => (
-          <line key={v} x1={sx(v)} x2={sx(v)} y1={PAD} y2={H - PAD} stroke="#1e1e1e" strokeWidth="1" />
+        {[-3,-2,-1,0,1,2,3].map(v => (
+          <line key={v} x1={sx(v)} x2={sx(v)} y1={PAD.top} y2={PAD.top+plotH} stroke="#181818" strokeWidth="1"/>
         ))}
 
         {/* Eixos */}
-        <line x1={PAD} x2={W - PAD} y1={H - PAD} y2={H - PAD} stroke="#444" strokeWidth="1.5" />
-        <line x1={PAD} x2={PAD} y1={PAD} y2={H - PAD} stroke="#444" strokeWidth="1.5" />
+        <line x1={PAD.left} x2={W-PAD.right} y1={sy(0)} y2={sy(0)} stroke="#333" strokeWidth="1.5"/>
+        <line x1={sx(0)} x2={sx(0)} y1={PAD.top} y2={PAD.top+plotH} stroke="#333" strokeWidth="1.5"/>
 
-        {/* Labels eixo x */}
-        {[0, 5, 10].map(v => (
-          <text key={v} x={sx(v)} y={H - PAD + 16} fill="#555" fontSize="10" textAnchor="middle">{v}</text>
-        ))}
-        <text x={W / 2} y={H - 4} fill="#555" fontSize="10" textAnchor="middle">ŷ (previsão)</text>
-
-        {/* Labels eixo y */}
-        {[0, 10, 20].map(v => (
-          <text key={v} x={PAD - 6} y={sy(v) + 4} fill="#555" fontSize="10" textAnchor="end">{v}</text>
+        {/* Marcadores eixo x */}
+        {[-2,-1,0,1,2].map(v => (
+          <text key={v} x={sx(v)} y={sy(0)+14} fill="#444" fontSize="9" textAnchor="middle">{v}</text>
         ))}
 
-        {/* Curva */}
-        <path d={parabolaPath()} fill="none" stroke="#7c6af7" strokeWidth="2.5" />
+        {/* Todas as curvas (opacas se não for a ativa) */}
+        {FUNCS.map(f => (
+          <path key={f.id} d={makePath(f.fn)}
+            fill="none" stroke={f.color} strokeWidth={f.id === active ? 2.5 : 1}
+            opacity={f.id === active ? 1 : 0.18}/>
+        ))}
 
-        {/* Linha vertical do mínimo */}
-        <line x1={sx(real)} x2={sx(real)} y1={sy(0)} y2={sy(25)} stroke="#4fc3f7" strokeWidth="1" strokeDasharray="4 3" />
-        <text x={sx(real)} y={PAD - 6} fill="#4fc3f7" fontSize="10" textAnchor="middle">y = {real} (real)</text>
-
-        {/* Ponto da previsão */}
-        <line x1={sx(guess)} x2={sx(guess)} y1={sy(loss)} y2={sy(0)} stroke="#f44336" strokeWidth="1" strokeDasharray="3 3" />
-        <line x1={sx(real)} x2={sx(guess)} y1={H - PAD} y2={H - PAD} stroke="#f44336" strokeWidth="2" />
-        <circle cx={sx(guess)} cy={sy(loss)} r="5" fill="#f44336" />
-
-        {/* Label do erro */}
-        {guess !== real && (
-          <text x={(sx(real) + sx(guess)) / 2} y={H - PAD - 6} fill="#f44336" fontSize="10" textAnchor="middle">
-            erro = {(guess - real).toFixed(1)}
-          </text>
-        )}
-        <text x={sx(guess) + 8} y={sy(loss) - 8} fill="#f44336" fontSize="11" fontWeight="bold">
-          L = {loss.toFixed(1)}
+        {/* Label da função ativa */}
+        <rect x={PAD.left+2} y={PAD.top+2} width={170} height={34}
+          rx="5" fill="#0c0c0c" stroke={cur.color} strokeWidth="1.5"/>
+        <text x={PAD.left+10} y={PAD.top+16} fill={cur.color} fontSize="12" fontWeight="bold">
+          {cur.label}
         </text>
-
-        {/* Mínimo */}
-        <circle cx={sx(real)} cy={sy(0)} r="4" fill="#4caf50" />
-        <text x={sx(real)} y={sy(0) - 8} fill="#4caf50" fontSize="10" textAnchor="middle">L = 0 (perfeito)</text>
+        <text x={PAD.left+10} y={PAD.top+29} fill="#555" fontSize="9">
+          {cur.desc}
+        </text>
       </svg>
 
-      <div style={{ padding: '0 12px 12px' }}>
-        <label style={{ fontSize: 12, color: '#666', display: 'block', marginBottom: 4 }}>
-          Mova a previsão ŷ = <strong style={{ color: '#f44336' }}>{guess.toFixed(1)}</strong>
-        </label>
-        <input type="range" min={0} max={10} step={0.1} value={guess}
-          onChange={e => setGuess(+e.target.value)}
-          style={{ width: '100%', accentColor: '#7c6af7' }} />
+      {/* Botões de seleção */}
+      <div style={{ padding: '8px 12px 12px', display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+        {FUNCS.map(f => (
+          <button key={f.id} onClick={() => setActive(f.id)}
+            style={{
+              fontSize: 11, border: `1px solid ${active === f.id ? f.color : '#2a2a2a'}`,
+              background: active === f.id ? f.color + '22' : 'transparent',
+              color: active === f.id ? f.color : '#555',
+              borderRadius: 4, padding: '3px 8px', cursor: 'pointer',
+            }}>
+            {f.label}
+          </button>
+        ))}
       </div>
     </div>
   );

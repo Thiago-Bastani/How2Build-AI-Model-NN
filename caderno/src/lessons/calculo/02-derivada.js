@@ -1,67 +1,69 @@
-export const derivadaViz = ['derivada'];
-
 export const derivada = [
   { type: 'h1', text: 'Derivada' },
-  { type: 'p', text: 'Você está de olhos vendados numa colina e quer chegar ao vale. Não dá pra ver nada — mas dá pra sentir o chão inclinando sob seus pés.' },
-  { type: 'p', text: 'Se inclina pra frente, você dá um passo pra trás. Se inclina pra esquerda, você dá um passo pra direita. Você vai na direção oposta à inclinação, e eventualmente chega ao vale.' },
-  { type: 'p', text: 'A derivada é essa inclinação. Nada mais.' },
+  { type: 'p', text: 'Você está num carro. O GPS mostra sua posição. O velocímetro mostra sua velocidade. A velocidade é exatamente a taxa em que sua posição está mudando agora. Se você está a 100 km/h, sua posição muda 100 km por hora neste instante.' },
+  { type: 'p', text: 'A derivada é isso. É a velocidade de mudança de uma função num ponto específico. Não a mudança total — a mudança instantânea, agora, neste ponto.' },
+  { type: 'p', text: 'Geometricamente: se você traçar uma reta que toca a curva em um único ponto sem cruzá-la — a **reta tangente** — a inclinação dessa reta é a derivada naquele ponto.' },
+  { type: 'viz', id: 'derivada' },
 
-  { type: 'h2', text: 'O que a inclinação diz' },
-  { type: 'p', text: 'Imagina um peso do modelo numa curva de erro. Você quer saber: se eu aumentar esse peso um tiquinho, o erro sobe ou desce?' },
-  { type: 'p', text: '**Inclinação positiva** — o erro está subindo nesse ponto. Aumente o peso e o erro piora. Então diminua o peso.' },
-  { type: 'p', text: '**Inclinação negativa** — o erro está descendo. Aumente o peso e o erro melhora. Então aumente o peso.' },
-  { type: 'p', text: '**Inclinação zero** — você chegou num ponto plano: um vale. O treino para aqui — não tem mais direção clara pra melhorar.' },
-  { type: 'p', text: 'A atualização é simples: `novo peso = peso - taxa × inclinação`. O sinal de menos garante que você vai sempre morro abaixo.' },
+  { type: 'h2', text: 'Como calcular — as regras' },
+  { type: 'p', text: 'Você não precisa calcular do zero toda vez. Existem regras. A mais importante é a **regra da potência**:' },
+  { type: 'p', text: 'O expoente desce e vira coeficiente. O expoente diminui em 1.' },
+  { type: 'list', items: [
+    'x² → expoente 2 desce → **2x**',
+    'x³ → expoente 3 desce → **3x²**',
+    'x⁵ → **5x⁴**',
+    'x → é x¹, vira **1**',
+    '7 → constante, não depende de x → **0**',
+  ]},
+  { type: 'p', text: 'Se tem número multiplicando, ele passa pra frente intacto. A derivada de `5x³` é `5 · 3x² = 15x²`.' },
+  { type: 'p', text: 'Se tem soma, deriva cada pedaço separado. A derivada de `x³ + 4x²` é `3x² + 8x`.' },
+  { type: 'viz', id: 'derivada-curvas' },
 
-  { type: 'h2', text: 'A taxa de aprendizado' },
-  { type: 'p', text: 'É o tamanho do passo que você dá na colina.' },
-  { type: 'p', text: '**Passo grande demais:** você pula por cima do vale e fica saltando de um lado pro outro pra sempre, sem descer.' },
-  { type: 'p', text: '**Passo pequeno demais:** você vai, mas demora horas — e pode travar num valezinho raso antes de chegar no vale de verdade.' },
-  { type: 'p', text: 'Valores entre `0.001` e `0.01` são um ponto de partida comum. Ajustar isso é parte da arte de treinar modelos.' },
+  { type: 'h3', text: 'Exemplo resolvido' },
+  { type: 'p', text: 'Qual é a derivada de `f(x) = 4x³ − 2x² + 7x − 5`?' },
+  { type: 'list', items: [
+    '`4x³` → `12x²`',
+    '`−2x²` → `−4x`',
+    '`7x` → `7`',
+    '`−5` → `0`',
+  ]},
+  { type: 'formula', text: "f'(x) = 12x² − 4x + 7" },
+  { type: 'p', text: 'Pra saber a inclinação em x=2: substitui. `12·4 − 4·2 + 7 = 47`.' },
 
-  { type: 'h2', text: 'Por que ReLU dominou sobre Sigmoid' },
-  { type: 'p', text: 'A inclinação do Sigmoid perto dos extremos é quase zero — tipo tentar sentir se o chão está inclinado quando a inclinação é de 0.001 grau. Você não sente nada.' },
-  { type: 'p', text: 'Numa rede com muitas camadas, essa inclinação quase-zero é multiplicada camada por camada. Após 10 camadas, é praticamente zero. As primeiras camadas param de aprender. Isso se chama **vanishing gradient** — o gradiente some.' },
-  { type: 'p', text: 'O ReLU tem inclinação 1 pra qualquer valor positivo. O sinal chega inteiro em todas as camadas. Simples assim — por isso virou o padrão.' },
+  { type: 'h3', text: 'Onde a derivada é zero' },
+  { type: 'p', text: 'Derivada zero = tangente horizontal = ponto de máximo ou mínimo da curva.' },
+  { type: 'p', text: 'Exemplo: `f(x) = x² − 6x + 5`. Derivada: `2x − 6`. Zero quando `x = 3`. A curva tem mínimo em x=3.' },
 
-  { type: 'note', text: '**Resumo:** derivada = inclinação da curva naquele ponto. Inclinação positiva → diminui o peso. Negativa → aumenta. Zero → chegou no mínimo. Taxa de aprendizado = tamanho do passo.' },
+  { type: 'note', text: 'Processo: (1) Derive usando as regras. (2) Para saber a inclinação num ponto, substitua o x. (3) Para achar mínimos/máximos, iguale a derivada a zero.' },
 
   { type: 'h2', text: 'A notação formal' },
-  { type: 'p', text: 'Nos livros e papers, a derivada aparece de formas diferentes — mas todas dizem a mesma coisa:' },
-  { type: 'formal', eq: "f'(x)  =  df/dx  =  lim(h→0) [f(x+h) − f(x)] / h", legend: [
-    "`f'(x)` — notação de Lagrange: \"f linha de x\", a derivada de f",
-    '`df/dx` — notação de Leibniz: "quanto f muda por quanto x muda"',
-    '`lim(h→0)` — limite: imagina h ficando cada vez menor, tendendo a zero',
-    '`f(x+h) − f(x)` — quanto a saída mudou quando a entrada andou h',
-    '`/ h` — dividido por quanto a entrada andou — dá a taxa de mudança',
+  { type: 'formal', eq: "d/dx [xⁿ]     =  n · xⁿ⁻¹\nd/dx [c]      =  0\nd/dx [c·f(x)] =  c · f'(x)\nd/dx [f+g]    =  f'(x) + g'(x)", legend: [
+    "`d/dx` — \"derivada em relação a x\"",
+    '`n·xⁿ⁻¹` — regra da potência: expoente desce e vira coeficiente',
+    '`c` constante: derivada zero',
+    "A linha: `f'(x)` — outra forma de escrever derivada de f",
   ]},
-  { type: 'formal', eq: 'w  ←  w  −  α · dL/dw', legend: [
-    '`←` — atribuição: "w recebe o valor de..."',
-    '`α` — alpha, a taxa de aprendizado (learning rate)',
-    '`dL/dw` — derivada da loss em relação ao peso w — a inclinação',
-    'Essa equação é o passo do gradient descent, escrita formalmente',
-  ]},
-  { type: 'formal', eq: "ReLU'(x) = 0  se x ≤ 0\n           = 1  se x > 0\n\nσ'(x) = σ(x) · (1 − σ(x))", legend: [
-    'Derivada do ReLU: binária, nunca quase-zero — gradiente flui limpo',
-    '`σ` — sigma, símbolo da função sigmoid',
-    "Derivada do sigmoid: o produto `σ(x) · (1 − σ(x))` vai a zero nos extremos",
-    'É exatamente isso que causa o vanishing gradient em redes profundas',
+  { type: 'formal', eq: "f'(x)  =  lim(h→0)  [f(x+h) − f(x)] / h", legend: [
+    'A definição por trás de todas as regras',
+    'Quanto f muda quando x anda h, dividido por h — com h tendendo a zero',
   ]},
 
   { type: 'h2', text: 'Ver na prática' },
   { type: 'code', code:
-`// f(x) = (x - 4)²  →  mínimo em x=4
-// inclinação em qualquer ponto = 2*(x-4)
-const f     = x => (x - 4) ** 2;
-const gradf = x => 2 * (x - 4);
+`const h = 0.00001;
+const derivNum = (f, x) => (f(x + h) - f(x)) / h;
 
-let x  = 0;
-const lr = 0.3;
+// f(x) = 4x³ − 2x² + 7x − 5  →  f'(x) = 12x² − 4x + 7
+const f    = x => 4*x**3 - 2*x**2 + 7*x - 5;
+const fAna = x => 12*x**2 - 4*x + 7;
 
-for (let i = 1; i <= 12; i++) {
-  const erro = f(x);
-  const inclinacao = gradf(x);
-  x = x - lr * inclinacao;  // passo morro abaixo
-  print(\`step \${String(i).padStart(2)}: x=\${x.toFixed(3).padStart(7)} | erro=\${erro.toFixed(4).padStart(8)} | inclinação=\${inclinacao.toFixed(3)}\`);
-}` },
+print('Numérica vs analítica:');
+[-2,-1,0,1,2,3].forEach(x => {
+  print(\`  x=\${x}: ≈\${derivNum(f,x).toFixed(2)}  exato=\${fAna(x)}\`);
+});
+
+// Mínimo de x² - 6x + 5
+print('\\nMínimo de x²-6x+5: derivada = 2x-6 = 0 → x=3');
+const g = x => x**2 - 6*x + 5;
+[-1,0,1,2,3,4,5].forEach(x => print(\`  x=\${x}: f=\${g(x)}\`));` },
 ];

@@ -1,70 +1,70 @@
-export const regraDaCadeiaViz = ['cadeia'];
-
 export const regraDaCadeia = [
   { type: 'h1', text: 'Regra da Cadeia' },
-  { type: 'p', text: 'Você sabe que 1 dólar compra 5 reais. E que 1 real compra 3 pesos argentinos. Quanto 1 dólar compra em pesos?' },
-  { type: 'p', text: '`5 × 3 = 15 pesos`. Você multiplicou as taxas.' },
-  { type: 'p', text: 'A regra da cadeia é exatamente isso — mas com taxas de mudança em vez de taxas de câmbio. Se y muda 3x quando z muda, e z muda 5x quando x muda, então y muda `3 × 5 = 15x` quando x muda.' },
+  { type: 'p', text: '1 dólar compra 5 reais. 1 real compra 3 pesos argentinos. Quanto 1 dólar compra em pesos? `5 × 3 = 15`. Você multiplicou as taxas.' },
+  { type: 'p', text: 'A regra da cadeia é a mesma lógica, mas com taxas de mudança (derivadas) em vez de taxas de câmbio. Se a saída de uma função muda 3x quando a entrada muda, e a entrada é ela própria uma função que muda 5x, a saída total muda `3 × 5 = 15x`.' },
+  { type: 'p', text: 'Em outras palavras: como derivar uma função dentro de outra função?' },
 
-  { type: 'h2', text: 'Por que isso importa em ML?' },
-  { type: 'p', text: 'Uma rede neural é uma sequência de transformações: entrada → camada 1 → camada 2 → camada 3 → erro.' },
-  { type: 'p', text: 'O treino precisa saber: "quanto esse peso lá na camada 1 contribuiu pro erro lá no final?". O peso está três camadas longe do erro — como calcular isso?' },
-  { type: 'p', text: 'Você encadeia as taxas de mudança. Quanto a camada 2 muda quando a camada 1 muda? Quanto a camada 3 muda quando a camada 2 muda? Quanto o erro muda quando a camada 3 muda? Multiplica tudo. Chegou.' },
+  { type: 'h2', text: 'O problema que a regra resolve' },
+  { type: 'p', text: 'Você quer derivar `(x² + 1)⁵`. Se o expoente estivesse em volta de um x simples — tipo `x⁵` — você usaria a regra da potência e ia embora: `5x⁴`.' },
+  { type: 'p', text: 'Mas dentro está `x² + 1`, não um x simples. Esse interior também muda com x. Ignorar isso dá o resultado errado.' },
+  { type: 'p', text: 'A regra da cadeia diz: **deriva o exterior (como se o interior fosse x) e multiplica pela derivada do interior**.' },
 
-  { type: 'h2', text: 'Por que "backpropagation"?' },
-  { type: 'p', text: 'Esse cálculo começa no erro — no final — e vai caminhando de trás pra frente, camada por camada, até chegar nos primeiros pesos. Cada camada recebe o "quanto o erro mudou" da camada seguinte e passa pra anterior.' },
-  { type: 'p', text: 'Por isso o nome: **back**propagation. O sinal de erro se propaga de volta pela rede.' },
+  { type: 'h2', text: 'O processo — passo a passo' },
+  { type: 'p', text: '**Passo 1:** Identifique o exterior e o interior.' },
+  { type: 'p', text: '**Passo 2:** Derive o exterior. Trate o interior como se fosse uma variável única (chame de u se ajudar).' },
+  { type: 'p', text: '**Passo 3:** Multiplique pela derivada do interior.' },
 
-  { type: 'h2', text: 'Vanishing gradient — quando o sinal some' },
-  { type: 'p', text: 'Lembra que a derivada do Sigmoid perto dos extremos é `0.007`? Na regra da cadeia, você multiplica essas derivadas a cada camada.' },
-  { type: 'p', text: '10 camadas com Sigmoid: `0.007 × 0.007 × 0.007...` — depois de algumas camadas, o número é praticamente zero. O sinal de erro não chega nas primeiras camadas. Elas simplesmente param de aprender.' },
-  { type: 'p', text: 'Com ReLU a derivada é 1 nos positivos. `1 × 1 × 1...` — o sinal chega inteiro em todas as camadas. É por isso que ReLU resolveu o vanishing gradient e dominou as redes profundas modernas.' },
+  { type: 'h3', text: 'Exemplo 1: (x² + 1)⁵' },
+  { type: 'p', text: 'Interior: `x² + 1`.   Exterior: `(...)⁵`.' },
+  { type: 'p', text: 'Derivada do exterior: `5(...)⁴` — expoente desceu, agora coloca o interior de volta.' },
+  { type: 'p', text: 'Derivada do interior `x² + 1`: é `2x`.' },
+  { type: 'p', text: 'Multiplica: `5(x²+1)⁴ × 2x = 10x(x²+1)⁴`. Pronto.' },
+  { type: 'formula', text: "d/dx [(x²+1)⁵]  =  10x(x²+1)⁴" },
 
-  { type: 'note', text: '**Resumo:** regra da cadeia = multiplica taxas de mudança em sequência. Backpropagation = aplica isso de trás pra frente em toda a rede. Vanishing gradient = derivadas menores que 1 multiplicadas muitas vezes viram zero.' },
+  { type: 'h3', text: 'Exemplo 2: sin(3x)' },
+  { type: 'p', text: 'Interior: `3x`.   Exterior: `sin(...)`.' },
+  { type: 'p', text: 'Derivada do exterior: `cos(...)`. Derivada do interior `3x`: é `3`.' },
+  { type: 'p', text: 'Multiplica: `cos(3x) × 3`.' },
+  { type: 'formula', text: "d/dx [sin(3x)]  =  3·cos(3x)" },
+
+  { type: 'h3', text: 'Exemplo 3: e^(x²)' },
+  { type: 'p', text: 'Interior: `x²`.   Exterior: `e^(...)`.' },
+  { type: 'p', text: 'Derivada do exterior: `e^(...)` (exponencial natural é ela mesma). Derivada do interior: `2x`.' },
+  { type: 'p', text: 'Multiplica: `e^(x²) × 2x`.' },
+  { type: 'formula', text: "d/dx [e^(x²)]  =  2x·e^(x²)" },
+
+  { type: 'note', text: 'Resumo: regra da cadeia = derive o exterior, multiplique pela derivada do interior. Com três camadas aninhadas, você multiplica três derivadas.' },
+  { type: 'viz', id: 'cadeia' },
 
   { type: 'h2', text: 'A notação formal' },
-  { type: 'formal', eq: 'd/dx [f(g(x))]  =  f\'(g(x)) · g\'(x)', legend: [
-    'Derivada de uma função composta f(g(x))',
-    "`f'(g(x))` — derivada de f, avaliada no ponto g(x)",
-    "`g'(x)` — derivada de g em relação a x",
-    'Você multiplica as derivadas — as taxas de câmbio se encadeiam',
-  ]},
-  { type: 'formal', eq: '∂L/∂w  =  ∂L/∂ŷ  ·  ∂ŷ/∂z  ·  ∂z/∂w', legend: [
-    'Regra da cadeia no backpropagation de um neurônio',
-    '`∂L/∂ŷ` — quanto o erro muda com a saída do neurônio',
-    '`∂ŷ/∂z` — quanto a saída muda com a entrada pré-ativação (derivada da ativação)',
-    '`∂z/∂w` — quanto a entrada pré-ativação muda com o peso (= a entrada x)',
-    'Multiplicando tudo: "quanto o erro muda se eu mexer nesse peso"',
-  ]},
-  { type: 'formal', eq: 'δˡ  =  ((Wˡ⁺¹)ᵀ δˡ⁺¹) ⊙ σ\'(zˡ)', legend: [
-    'A fórmula completa do backprop em notação matricial — a versão monstruosa',
-    '`δˡ` — o "delta" da camada l: o erro que chegou nessa camada',
-    '`(Wˡ⁺¹)ᵀ` — pesos da camada seguinte transpostos (para inverter a direção)',
-    '`δˡ⁺¹` — o erro da camada seguinte, que está sendo propagado de volta',
-    '`⊙` — produto elemento a elemento (Hadamard)',
-    "`σ'(zˡ)` — derivada da ativação aplicada na entrada pré-ativação dessa camada",
-    'Leia como: "o erro desta camada vem do erro da próxima, filtrado pela derivada da ativação"',
+  { type: 'formal', eq: "d/dx [ f(g(x)) ]  =  f'(g(x)) · g'(x)", legend: [
+    '`g(x)` — a função interior',
+    '`f(...)` — a função exterior',
+    "`f'(g(x))` — deriva f, mas avalia no ponto g(x), não em x direto",
+    "`g'(x)` — deriva o interior normalmente",
+    'Multiplica as duas — é a mesma lógica do câmbio encadeado',
   ]},
 
   { type: 'h2', text: 'Ver na prática' },
   { type: 'code', code:
-`// TF calculando backprop automaticamente
-// erro = (sigmoid(w*x + b) - y)²
-// Quanto o erro muda se w mudar?
+`const h = 0.00001;
+const derivNum = (f, x) => (f(x + h) - f(x)) / h;
 
-const sigmoid = v => v.sigmoid();
-const x = tf.scalar(2.0);
-const y = tf.scalar(1.0);
-const b = tf.scalar(0.1);
+// (x² + 1)⁵ → analítica: 10x(x²+1)⁴
+const f1    = x => (x**2 + 1)**5;
+const f1Ana = x => 10 * x * (x**2 + 1)**4;
 
-const dErro_dW = tf.grad(w => {
-  const saida = sigmoid(w.mul(x).add(b));
-  return saida.sub(y).square();
+print('d/dx [(x²+1)⁵]:');
+[-2,-1,0,1,2].forEach(x => {
+  print(\`  x=\${x}: numérica=\${derivNum(f1,x).toFixed(1)}  analítica=\${f1Ana(x)}\`);
 });
 
-[-1, 0, 0.5, 1, 2].forEach(wVal => {
-  const w    = tf.scalar(wVal);
-  const grad = dErro_dW(w).dataSync()[0];
-  print(\`w=\${wVal.toFixed(1)}: gradiente=\${grad.toFixed(5)}  → \${grad > 0 ? 'diminuir w' : 'aumentar w'}\`);
+// e^(x²) → analítica: 2x·e^(x²)
+const f2    = x => Math.exp(x**2);
+const f2Ana = x => 2 * x * Math.exp(x**2);
+
+print('\\nd/dx [e^(x²)]:');
+[-1, 0, 0.5, 1].forEach(x => {
+  print(\`  x=\${x}: numérica=\${derivNum(f2,x).toFixed(4)}  analítica=\${f2Ana(x).toFixed(4)}\`);
 });` },
 ];

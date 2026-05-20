@@ -26,7 +26,7 @@ export default function CadeiaViz() {
   return (
     <div className="viz-card">
       <div className="viz-title">Regra da Cadeia — backpropagation</div>
-      <svg width={W} height={H}>
+      <svg width="100%" viewBox={`0 0 ${W} ${H}`}>
         {/* Forward arrows */}
         {STEPS.slice(0, -1).map((s, i) => (
           <line key={i}

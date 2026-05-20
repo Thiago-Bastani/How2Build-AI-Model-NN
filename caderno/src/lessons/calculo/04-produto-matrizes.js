@@ -1,69 +1,44 @@
-export const produtoMatrizesViz = ['produto-matriz'];
-
 export const produtoMatrizes = [
   { type: 'h1', text: 'Produto de Matrizes' },
-  { type: 'p', text: 'Cada camada de uma rede neural faz uma operação. Essa operação é o produto de matrizes. Antes de aprender como calcular, vale entender **por que** ela existe.' },
+  { type: 'p', text: 'Você tem 3 turmas de alunos e 2 provas. Cada turma tem uma nota em cada prova. Isso é uma tabela 3×2 — 3 linhas (turmas), 2 colunas (provas).' },
+  { type: 'p', text: 'Agora você quer calcular a nota final de cada turma, onde a prova 1 vale 60% e a prova 2 vale 40%. Você multiplica cada nota pelo peso correspondente e soma. Isso é o **produto escalar** — e é exatamente o que o produto de matrizes faz, só que pra todas as combinações de uma vez.' },
 
-  { type: 'h2', text: 'Começando simples: combinando entradas' },
-  { type: 'p', text: 'Imagina um neurônio que recebe 3 sinais: temperatura, umidade e vento. Ele não trata os três igualmente — cada um tem um peso diferente. Ele multiplica cada sinal pelo peso dele e soma tudo.' },
-  { type: 'p', text: '`temperatura × 0.5 + umidade × 0.3 + vento × 0.2`' },
-  { type: 'p', text: 'Isso é o produto escalar — combina duas listas em um número. É exatamente o que um único neurônio faz.' },
+  { type: 'h2', text: 'Produto escalar primeiro' },
+  { type: 'p', text: 'Dados dois vetores do mesmo tamanho: multiplica posição a posição e soma tudo. `[1, 2, 3] · [4, 5, 6] = 1×4 + 2×5 + 3×6 = 32`. O resultado é um número só.' },
+  { type: 'p', text: 'É a operação mais básica. O produto de matrizes inteiro é construído em cima disso.' },
 
-  { type: 'h2', text: 'Mas uma rede tem muitos neurônios e muitas amostras' },
-  { type: 'p', text: 'Você não tem um neurônio — tem 256. E não tem uma amostra — tem 1000.' },
-  { type: 'p', text: 'Fazer cada combinação separadamente, um por um, seria absurdamente lento. O produto de matrizes faz tudo isso de uma vez: **todas as 1000 amostras passando pelos 256 neurônios em uma única operação**.' },
-  { type: 'p', text: 'É por isso que ele existe. É eficiência em escala.' },
+  { type: 'h2', text: 'Como calcular o produto de matrizes' },
+  { type: 'p', text: 'Cada célula do resultado vem de: **pega a linha da esquerda, pega a coluna da direita, faz o produto escalar**.' },
+  { type: 'p', text: 'Célula [linha 0, coluna 0] do resultado = produto escalar da linha 0 de A com a coluna 0 de B. Célula [linha 0, coluna 1] = linha 0 de A com coluna 1 de B. E assim por diante.' },
+  { type: 'p', text: 'Pra funcionar, o número de colunas de A tem que ser igual ao número de linhas de B — é o número que "se cancela" no meio.' },
+  { type: 'viz', id: 'produto-matriz' },
 
-  { type: 'h2', text: 'A regra que você precisa memorizar' },
-  { type: 'p', text: 'Pra multiplicar duas matrizes, os números do meio têm que bater. O resultado tem os números das bordas.' },
-  { type: 'p', text: '`[1000 amostras × 128 features]  ×  [128 features × 256 neurônios]  =  [1000 × 256]`' },
-  { type: 'p', text: 'O `128` no meio é igual nos dois — beleza. O resultado é `[1000 × 256]`: cada uma das 1000 amostras tem 256 saídas.' },
-  { type: 'warn', text: 'Quando der erro de shape no TensorFlow, é quase sempre porque o meio não bate. Escreva os dois shapes lado a lado e procure o "128 ≠ 64" que está lá.' },
+  { type: 'h3', text: 'Exemplo manual' },
+  { type: 'p', text: 'A = [[1, 2], [3, 4]]  e  B = [[5, 6], [7, 8]].' },
+  { type: 'p', text: 'C[0][0] = linha 0 de A · coluna 0 de B = `[1,2]·[5,7] = 5+14 = 19`' },
+  { type: 'p', text: 'C[0][1] = linha 0 de A · coluna 1 de B = `[1,2]·[6,8] = 6+16 = 22`' },
+  { type: 'p', text: 'C[1][0] = `[3,4]·[5,7] = 15+28 = 43`    C[1][1] = `[3,4]·[6,8] = 18+32 = 50`' },
+  { type: 'formula', text: 'Resultado: [[19, 22], [43, 50]]' },
 
-  { type: 'h2', text: 'Por que GPUs?' },
-  { type: 'p', text: 'Cada número do resultado é independente dos outros — dá pra calcular todos em paralelo. Uma GPU tem milhares de núcleos pequenos feitos exatamente pra isso. O que uma CPU faria em segundos, uma GPU faz em milissegundos.' },
-  { type: 'p', text: 'É a razão principal pra usar GPU em treino. A operação central da rede neural se encaixa perfeitamente na arquitetura da GPU.' },
-
-  { type: 'note', text: '**Resumo:** produto escalar combina dois vetores em um número — é o que um neurônio faz. Produto de matrizes faz isso pra todas as amostras e todos os neurônios de uma vez. Regra: o meio tem que bater.' },
+  { type: 'warn', text: 'A × B não é igual a B × A na maioria dos casos. Produto de matrizes não é comutativo — a ordem importa.' },
+  { type: 'note', text: 'Resumo: produto escalar = multiplica posição a posição e soma. Produto de matrizes = faz isso pra cada par de (linha de A, coluna de B). O número do meio tem que bater: [m×k]·[k×n] = [m×n].' },
 
   { type: 'h2', text: 'A notação formal' },
-  { type: 'formal', eq: 'a · b  =  Σᵢ aᵢbᵢ  =  a₁b₁ + a₂b₂ + ... + aₙbₙ', legend: [
-    '`·` — ponto: produto escalar (dot product)',
-    '`Σᵢ` — somatório sobre i: repete a multiplicação pra cada posição',
-    '`aᵢbᵢ` — i-ésimo elemento de a multiplicado pelo i-ésimo de b',
-    'Resultado: um único número',
-  ]},
-  { type: 'formal', eq: 'C = A · B\nonde  Cᵢⱼ = Σₖ Aᵢₖ · Bₖⱼ', legend: [
-    '`Cᵢⱼ` — elemento na linha i, coluna j do resultado',
-    '`Aᵢₖ` — linha i de A (uma amostra)',
-    '`Bₖⱼ` — coluna j de B (pesos do j-ésimo neurônio)',
-    '`Σₖ` — soma sobre k: cada elemento do resultado é um produto escalar completo',
-    'O produto de matrizes é: "faça o produto escalar de cada linha com cada coluna"',
-  ]},
-  { type: 'formal', eq: '[A × B]  ·  [B × C]  =  [A × C]', legend: [
-    'Regra dos shapes: o B do meio precisa ser igual',
-    'A = amostras, B = features/entradas, C = neurônios/saídas',
-    'Ex: [32 × 128] · [128 × 64] = [32 × 64]  ✓',
-    'Ex: [32 × 128] · [64 × 64] — ERRO, 128 ≠ 64  ✗',
+  { type: 'formal', eq: 'C = A · B\nCᵢⱼ = Σₖ Aᵢₖ · Bₖⱼ\n\n[m × k] · [k × n] = [m × n]', legend: [
+    '`Cᵢⱼ` — célula na linha i, coluna j do resultado',
+    '`Aᵢₖ` — percorre a linha i de A',
+    '`Bₖⱼ` — percorre a coluna j de B',
+    '`Σₖ` — soma sobre k — é o produto escalar completo',
+    'O k (o meio) tem que ser igual nos dois shapes',
   ]},
 
   { type: 'h2', text: 'Ver na prática' },
   { type: 'code', code:
-`// 3 amostras, 2 features cada → shape [3, 2]
-const X = tf.tensor2d([
-  [1, 2],
-  [3, 4],
-  [5, 6],
-]);
+`const A = tf.tensor2d([[1, 2], [3, 4]]);
+const B = tf.tensor2d([[5, 6], [7, 8]]);
 
-// 2 entradas → 3 neurônios → shape [2, 3]
-const W = tf.tensor2d([
-  [0.1, 0.2, 0.3],
-  [0.4, 0.5, 0.6],
-]);
-
-// [3,2] · [2,3] = [3,3]
-print('Entradas [3 × 2]:'); X.print();
-print('Pesos [2 × 3]:');    W.print();
-print('Saída [3 × 3]:');    X.matMul(W).print();` },
+print('A:');     A.print();
+print('B:');     B.print();
+print('A·B:');   A.matMul(B).print();
+print('B·A (diferente!):'); B.matMul(A).print();` },
 ];

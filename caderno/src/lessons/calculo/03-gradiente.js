@@ -1,65 +1,46 @@
-export const gradienteViz = ['gradiente'];
-
 export const gradiente = [
   { type: 'h1', text: 'Gradiente' },
-  { type: 'p', text: 'A derivada funciona quando você tem um único botão pra girar. Uma rede neural tem milhares de botões — os pesos. O gradiente é a resposta pra: como girar todos os botões ao mesmo tempo, cada um na direção certa?' },
+  { type: 'p', text: 'Você está no meio de uma montanha, de olhos vendados. Quer saber qual a direção mais íngreme — onde o terreno sobe mais rápido. Você testa uma direção de cada vez: primeiro norte-sul, depois leste-oeste. Combinando as duas informações, você descobre a direção do morro mais alto.' },
+  { type: 'p', text: 'O gradiente é exatamente isso. Quando uma função depende de mais de uma variável, o gradiente combina as inclinações em cada direção num único vetor que aponta pra onde a função cresce mais rápido.' },
 
-  { type: 'h2', text: 'Derivada parcial — um botão de cada vez' },
-  { type: 'p', text: 'Imagina uma tigela. Sua posição dentro dela é descrita por dois números: x e y.' },
-  { type: 'p', text: 'Você quer saber: se eu me mover só na direção x, o quanto a tigela sobe ou desce? Isso é a derivada parcial em x. Depois você pergunta o mesmo pra y.' },
-  { type: 'p', text: 'Você trata x e y separadamente — um de cada vez — como se o outro não existisse.' },
+  { type: 'h2', text: 'Derivada parcial — uma direção de cada vez' },
+  { type: 'p', text: 'Com uma variável, derivada é simples. Com duas variáveis — digamos `f(x, y)` — você precisa perguntar: "se eu mexer só em x (mantendo y parado), o quanto f muda?".' },
+  { type: 'p', text: 'Isso se chama derivada parcial em x. Depois você faz a mesma pergunta pra y. Você finge que a outra variável é uma constante e deriva normalmente.' },
 
-  { type: 'h2', text: 'O gradiente junta tudo' },
-  { type: 'p', text: 'Depois de calcular a derivada parcial pra cada peso, você junta tudo numa lista: `[inclinação do peso 1, inclinação do peso 2, ..., inclinação do peso N]`.' },
-  { type: 'p', text: 'Essa lista é o gradiente. Ela é uma seta que aponta na direção de maior subida do erro.' },
-  { type: 'p', text: 'O treino usa essa seta ao contrário — anda na direção oposta. É o gradient descent, agora em todas as dimensões ao mesmo tempo.' },
-  { type: 'p', text: 'Em vez de `novo peso = peso - taxa × inclinação` pra um peso, você faz isso pra cada peso da lista, cada um com sua própria inclinação.' },
+  { type: 'h3', text: 'Exemplo' },
+  { type: 'p', text: 'Seja `f(x, y) = x² + 3y`. Qual a inclinação em x? Qual a inclinação em y?' },
+  { type: 'p', text: 'Em x: trata y como constante. `x²` vira `2x`, `3y` vira `0` (não tem x). Resultado: **2x**.' },
+  { type: 'p', text: 'Em y: trata x como constante. `x²` vira `0` (não tem y), `3y` vira `3`. Resultado: **3**.' },
+  { type: 'p', text: 'No ponto (x=2, y=5): inclinação em x = `2·2 = 4`. Inclinação em y = `3`. O gradiente é o vetor `[4, 3]`.' },
+  { type: 'viz', id: 'gradiente' },
 
-  { type: 'h2', text: 'Por que um vetor e não só um número?' },
-  { type: 'p', text: 'Com um peso só, o "erro" é uma curva 2D — você vai pra esquerda ou pra direita.' },
-  { type: 'p', text: 'Com dois pesos, é uma superfície 3D — tipo uma tigela ou montanha. Você pode ir em qualquer direção do plano.' },
-  { type: 'p', text: 'Com um milhão de pesos, é uma superfície em um milhão de dimensões. Impossível de imaginar — mas a matemática funciona igual. O gradiente ainda aponta morro acima, e o treino ainda anda no sentido contrário.' },
-
-  { type: 'h2', text: 'O TensorFlow faz tudo isso por você' },
-  { type: 'p', text: 'Calcular a derivada parcial de cada peso à mão seria impossível. O TensorFlow grava cada operação que você faz. Quando você pede o gradiente, ele percorre essas operações de trás pra frente e calcula a inclinação de cada peso automaticamente.' },
-  { type: 'p', text: 'Isso se chama **autodiff** — diferenciação automática. É uma das razões principais pra existência de frameworks como TensorFlow e PyTorch.' },
-
-  { type: 'note', text: '**Resumo:** gradiente = lista com a inclinação de cada peso. Aponta morro acima. O treino usa ao contrário. Com 1M de pesos → gradiente tem 1M de números, um por peso.' },
+  { type: 'h2', text: 'O vetor gradiente' },
+  { type: 'p', text: 'Você junta as derivadas parciais de todas as variáveis num vetor. Esse vetor — o gradiente — aponta na direção de maior subida da função naquele ponto.' },
+  { type: 'p', text: 'Se o gradiente é `[4, 3]`, significa: mover 1 unidade em x sobe 4, mover 1 unidade em y sobe 3. A direção `[4, 3]` combinada é a mais íngreme.' },
+  { type: 'note', text: 'Resumo: gradiente = lista das derivadas parciais, uma por variável. Aponta pra onde a função sobe mais rápido. Com n variáveis, o gradiente tem n números.' },
 
   { type: 'h2', text: 'A notação formal' },
-  { type: 'formal', eq: '∂f/∂x  =  lim(h→0)  [f(x+h, y) − f(x, y)] / h', legend: [
-    '`∂` — "d parcial", diferente do d normal — avisa que há mais variáveis',
-    '`∂f/∂x` — derivada de f em relação a x, mantendo y fixo',
-    'Você vai ver `∂` muito em papers de ML — é sempre derivada parcial',
-  ]},
-  { type: 'formal', eq: '∇L(w)  =  [ ∂L/∂w₁,  ∂L/∂w₂,  ...  ∂L/∂wₙ ]', legend: [
-    '`∇` — nabla, o símbolo do gradiente (lê-se "grad L de w")',
-    '`L` — a função de custo (loss)',
-    '`∂L/∂wᵢ` — derivada parcial do custo em relação ao i-ésimo peso',
-    'O resultado é um vetor: um número por peso, todos juntos numa lista',
-  ]},
-  { type: 'formal', eq: 'w  ←  w  −  α · ∇L(w)', legend: [
-    'Gradient descent escrito formalmente',
-    '`w` — vetor de todos os pesos (não só um)',
-    '`∇L(w)` — gradiente completo: a lista de inclinações',
-    'Subtrai o gradiente = anda morro abaixo em todas as dimensões de uma vez',
+  { type: 'formal', eq: '∂f/∂x  — derivada parcial de f em relação a x\n∂f/∂y  — derivada parcial de f em relação a y\n\n∇f(x, y)  =  [ ∂f/∂x,  ∂f/∂y ]', legend: [
+    '`∂` — "d parcial": avisa que há mais de uma variável',
+    '`∂f/∂x` — deriva em x, trata todas as outras como constante',
+    '`∇` — nabla, símbolo do gradiente (lê-se "grad f")',
+    'Para `f(x,y) = x² + 3y`: `∇f = [2x, 3]`',
   ]},
 
   { type: 'h2', text: 'Ver na prática' },
   { type: 'code', code:
-`// erro(w1, w2) = (w1 - 3)² + (w2 - 7)²
-// mínimo quando w1=3 e w2=7
+`// f(x, y) = x² + 3y  →  ∂f/∂x = 2x, ∂f/∂y = 3
+const h = 0.00001;
+const f = (x, y) => x**2 + 3*y;
 
-let w1 = 0, w2 = 0;
-const lr = 0.2;
+// Derivadas parciais numéricas
+const dfx = (x, y) => (f(x+h, y) - f(x, y)) / h;
+const dfy = (x, y) => (f(x, y+h) - f(x, y)) / h;
 
-for (let i = 1; i <= 8; i++) {
-  const erro = (w1-3)**2 + (w2-7)**2;
-  const g1   = 2*(w1-3);   // inclinação de w1
-  const g2   = 2*(w2-7);   // inclinação de w2
-  w1 -= lr * g1;            // atualiza w1
-  w2 -= lr * g2;            // atualiza w2
-  print(\`step \${i}: w1=\${w1.toFixed(3).padStart(6)} w2=\${w2.toFixed(3).padStart(6)} | erro=\${erro.toFixed(3)}\`);
-}
-print(\`\\nalvo: w1=3, w2=7\`);` },
+print('Gradiente de f(x,y) = x² + 3y:');
+print('Analítico: ∂f/∂x = 2x, ∂f/∂y = 3');
+print('');
+[[1,2],[2,5],[-1,0],[3,-2]].forEach(([x,y]) => {
+  print(\`  ponto (\${x},\${y}): ∇f ≈ [\${dfx(x,y).toFixed(2)}, \${dfy(x,y).toFixed(2)}]  |  analítico = [\${2*x}, 3]\`);
+});` },
 ];

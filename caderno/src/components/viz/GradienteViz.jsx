@@ -1,156 +1,119 @@
-// Visualização: contour map de (w1-3)² + (w2-7)² com gradient descent
-import { useState, useEffect, useRef } from 'react';
+// Mostra: mapa de contorno de f(x,y)=x²+y², setas de ∂f/∂x e ∂f/∂y separadas, e o gradiente
+// Cita: "derivada parcial — uma direção de cada vez"
+import { useState } from 'react';
 
-const W = 300, H = 280;
-const PAD = 36;
-const w1Min = 0, w1Max = 6;
-const w2Min = 4, w2Max = 10;
+const W = 280, H = 280;
+const PAD = { top: 20, right: 20, bottom: 32, left: 36 };
+const plotW = W - PAD.left - PAD.right;
+const plotH = H - PAD.top - PAD.bottom;
+const xMin = -3, xMax = 3, yMin = -3, yMax = 3;
 
-function sw1(v) { return PAD + ((v - w1Min) / (w1Max - w1Min)) * (W - PAD * 2); }
-function sw2(v) { return H - PAD - ((v - w2Min) / (w2Max - w2Min)) * (H - PAD * 2); }
+function sx(v) { return PAD.left + ((v - xMin) / (xMax - xMin)) * plotW; }
+function sy(v) { return PAD.top  + plotH - ((v - yMin) / (yMax - yMin)) * plotH; }
 
-const f  = (w1, w2) => (w1 - 3) ** 2 + (w2 - 7) ** 2;
-const gw1 = (w1) => 2 * (w1 - 3);
-const gw2 = (w2) => 2 * (w2 - 7);
+const LEVELS = [0.5, 1, 2, 4, 7];
+const COLORS  = ['#4caf50','#81c784','#4fc3f7','#7c6af7','#c06af7'];
 
-const LEVELS = [0.1, 0.5, 1, 2, 4, 7, 11, 16];
-const COLORS  = ['#4caf50','#66bb6a','#81c784','#4fc3f7','#29b6f6','#7c6af7','#9c6af7','#c06af7'];
-
-function ellipsePath(level) {
+function circlePath(r) {
   const pts = [];
   for (let i = 0; i <= 72; i++) {
-    const angle = (i / 72) * 2 * Math.PI;
-    const r = Math.sqrt(level);
-    const w1 = 3 + r * Math.cos(angle);
-    const w2 = 7 + r * Math.sin(angle);
-    if (w1 < w1Min || w1 > w1Max || w2 < w2Min || w2 > w2Max) {
-      pts.push(null);
-    } else {
-      pts.push(`${sw1(w1).toFixed(1)},${sw2(w2).toFixed(1)}`);
-    }
+    const a = (i / 72) * 2 * Math.PI;
+    const x = r * Math.cos(a), y = r * Math.sin(a);
+    if (x < xMin || x > xMax || y < yMin || y > yMax) { pts.push(null); continue; }
+    pts.push(`${sx(x).toFixed(1)},${sy(y).toFixed(1)}`);
   }
-  // Split at nulls into M L sequences
-  let d = '';
-  let inPath = false;
+  let d = '', pen = false;
   for (const pt of pts) {
-    if (pt === null) { inPath = false; continue; }
-    d += (inPath ? 'L' : 'M') + pt + ' ';
-    inPath = true;
+    if (!pt) { pen = false; continue; }
+    d += (pen ? 'L' : 'M') + pt + ' '; pen = true;
   }
   return d;
 }
 
 export default function GradienteViz() {
-  const [pos, setPos] = useState({ w1: 0.5, w2: 4.5 });
-  const [trail, setTrail] = useState([{ w1: 0.5, w2: 4.5 }]);
-  const [running, setRunning] = useState(false);
-  const runRef = useRef(false);
-  const posRef = useRef(pos);
-
-  function startDescent() {
-    const start = { w1: 0.5, w2: 4.5 };
-    posRef.current = start;
-    setPos(start);
-    setTrail([start]);
-    runRef.current = true;
-    setRunning(true);
-  }
-
-  useEffect(() => {
-    if (!running) return;
-    let cur = { ...posRef.current };
-    const lr = 0.18;
-    const step = () => {
-      if (!runRef.current) return;
-      const g1 = gw1(cur.w1);
-      const g2 = gw2(cur.w2);
-      cur = { w1: cur.w1 - lr * g1, w2: cur.w2 - lr * g2 };
-      posRef.current = cur;
-      setPos({ ...cur });
-      setTrail(t => [...t, { ...cur }]);
-      if (Math.abs(g1) > 0.08 || Math.abs(g2) > 0.08) {
-        setTimeout(step, 120);
-      } else {
-        runRef.current = false;
-        setRunning(false);
-      }
-    };
-    setTimeout(step, 120);
-    return () => { runRef.current = false; };
-  }, [running]);
-
-  const erro = f(pos.w1, pos.w2);
+  const [px, setPx] = useState(2);
+  const [py, setPy] = useState(1.5);
+  // f(x,y) = x² + y²  →  ∂f/∂x = 2x,  ∂f/∂y = 2y
+  const gx = 2 * px;
+  const gy = 2 * py;
+  const scale = 0.3;
 
   return (
     <div className="viz-card">
-      <div className="viz-title">Gradiente — mapa de contorno</div>
-      <svg width={W} height={H}>
-        {/* Contour lines */}
+      <div className="viz-title">Derivadas Parciais e Gradiente</div>
+      <svg width="100%" viewBox={`0 0 ${W} ${H}`}>
+        <defs>
+          {['gx','gy','grad'].map(id => (
+            <marker key={id} id={id} markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+              <path d="M0,0 L6,3 L0,6 Z" fill={id==='gx'?'#4fc3f7':id==='gy'?'#f44336':'#fff'}/>
+            </marker>
+          ))}
+        </defs>
+
+        {/* Anéis — cada anel = mesmo valor de f */}
         {LEVELS.map((lv, i) => (
-          <path key={lv} d={ellipsePath(lv)} fill="none"
-            stroke={COLORS[i]} strokeWidth="1" opacity="0.5"/>
+          <path key={lv} d={circlePath(Math.sqrt(lv))} fill="none"
+            stroke={COLORS[i]} strokeWidth="1.2" opacity="0.5"/>
         ))}
+
+        {/* Label dos anéis */}
+        <text x={sx(0.15)} y={sy(0.15)} fill="#4caf50" fontSize="8" textAnchor="middle">0</text>
+        <text x={W-PAD.right-2} y={PAD.top+10} fill="#555" fontSize="8" textAnchor="end">cada anel = mesmo f(x,y)</text>
 
         {/* Eixos */}
-        <line x1={PAD} x2={W-PAD} y1={H-PAD} y2={H-PAD} stroke="#444" strokeWidth="1.5"/>
-        <line x1={PAD} x2={PAD} y1={PAD} y2={H-PAD} stroke="#444" strokeWidth="1.5"/>
-        {[0,2,4,6].map(v => (
-          <text key={v} x={sw1(v)} y={H-PAD+15} fill="#555" fontSize="10" textAnchor="middle">{v}</text>
-        ))}
-        {[4,6,8,10].map(v => (
-          <text key={v} x={PAD-6} y={sw2(v)+4} fill="#555" fontSize="10" textAnchor="end">{v}</text>
-        ))}
-        <text x={W/2} y={H-4} fill="#555" fontSize="10" textAnchor="middle">w₁</text>
-        <text x={10} y={H/2} fill="#555" fontSize="10" textAnchor="middle" transform={`rotate(-90,10,${H/2})`}>w₂</text>
+        <line x1={PAD.left} x2={W-PAD.right} y1={sy(0)} y2={sy(0)} stroke="#333" strokeWidth="1.5"/>
+        <line x1={sx(0)} x2={sx(0)} y1={PAD.top} y2={PAD.top+plotH} stroke="#333" strokeWidth="1.5"/>
+        <text x={W-PAD.right+2} y={sy(0)+4} fill="#444" fontSize="9">x</text>
+        <text x={sx(0)+4} y={PAD.top+8} fill="#444" fontSize="9">y</text>
 
-        {/* Trail */}
-        {trail.length > 1 && (
-          <polyline
-            points={trail.map(p => `${sw1(p.w1).toFixed(1)},${sw2(p.w2).toFixed(1)}`).join(' ')}
-            fill="none" stroke="#fff" strokeWidth="1.5" opacity="0.7"
-          />
-        )}
+        {/* Seta ∂f/∂x — só se move em x */}
+        <line
+          x1={sx(px)} y1={sy(py)}
+          x2={sx(px + gx*scale)} y2={sy(py)}
+          stroke="#4fc3f7" strokeWidth="2" markerEnd="url(#gx)"/>
+        <text x={sx(px + gx*scale/2)} y={sy(py)-7}
+          fill="#4fc3f7" fontSize="9" textAnchor="middle">∂f/∂x={gx.toFixed(1)}</text>
 
-        {/* Gradiente arrow */}
-        {(() => {
-          const g1 = gw1(pos.w1), g2 = gw2(pos.w2);
-          const norm = Math.sqrt(g1**2 + g2**2) + 0.001;
-          const scale = 0.5;
-          const x1 = sw1(pos.w1), y1 = sw2(pos.w2);
-          const x2 = sw1(pos.w1 + g1 * scale), y2 = sw2(pos.w2 + g2 * scale);
-          return (
-            <g>
-              <defs>
-                <marker id="arr" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
-                  <path d="M0,0 L6,3 L0,6 Z" fill="#f44336"/>
-                </marker>
-              </defs>
-              <line x1={x1} y1={y1} x2={x2} y2={y2} stroke="#f44336" strokeWidth="2" markerEnd="url(#arr)" opacity="0.8"/>
-            </g>
-          );
-        })()}
+        {/* Seta ∂f/∂y — só se move em y */}
+        <line
+          x1={sx(px)} y1={sy(py)}
+          x2={sx(px)} y2={sy(py + gy*scale)}
+          stroke="#f44336" strokeWidth="2" markerEnd="url(#gy)"/>
+        <text x={sx(px)+6} y={sy(py + gy*scale/2)}
+          fill="#f44336" fontSize="9">∂f/∂y={gy.toFixed(1)}</text>
 
-        {/* Mínimo */}
-        <circle cx={sw1(3)} cy={sw2(7)} r="5" fill="#4caf50" stroke="#0c0c0c" strokeWidth="2"/>
-        <text x={sw1(3)+8} y={sw2(7)-4} fill="#4caf50" fontSize="10">mínimo</text>
+        {/* Seta do gradiente combinado */}
+        <line
+          x1={sx(px)} y1={sy(py)}
+          x2={sx(px + gx*scale)} y2={sy(py + gy*scale)}
+          stroke="#fff" strokeWidth="2.5" markerEnd="url(#grad)" opacity="0.9"/>
+        <text x={sx(px + gx*scale)+4} y={sy(py + gy*scale)-4}
+          fill="#fff" fontSize="9" fontWeight="bold">∇f</text>
 
-        {/* Posição atual */}
-        <circle cx={sw1(pos.w1)} cy={sw2(pos.w2)} r="5" fill="#fff" stroke="#7c6af7" strokeWidth="2"/>
+        {/* Ponto */}
+        <circle cx={sx(px)} cy={sy(py)} r="5" fill="#fff" stroke="#0c0c0c" strokeWidth="2"/>
 
-        <text x={W-PAD} y={PAD+14} fill="#aaa" fontSize="11" textAnchor="end">
-          erro = {erro.toFixed(3)}
-        </text>
-        <text x={W-PAD} y={PAD+27} fill="#666" fontSize="10" textAnchor="end">
-          w1={pos.w1.toFixed(2)}, w2={pos.w2.toFixed(2)}
-        </text>
+        {/* Legenda */}
+        <rect x={PAD.left+1} y={H-PAD.bottom-30} width={162} height={28} rx="4" fill="#0c0c0c" opacity="0.9"/>
+        <circle cx={PAD.left+10} cy={H-PAD.bottom-20} r="3" fill="#4fc3f7"/>
+        <text x={PAD.left+16} y={H-PAD.bottom-16} fill="#4fc3f7" fontSize="8">∂f/∂x — só x muda</text>
+        <circle cx={PAD.left+10} cy={H-PAD.bottom-8} r="3" fill="#f44336"/>
+        <text x={PAD.left+16} y={H-PAD.bottom-4} fill="#f44336" fontSize="8">∂f/∂y — só y muda</text>
       </svg>
 
-      <div style={{ padding: '4px 12px 12px' }}>
-        <button onClick={startDescent} disabled={running}
-          style={{ fontSize: 12, background: '#7c6af7', border: 'none', color: '#fff', borderRadius: 5, padding: '4px 12px', cursor: 'pointer', opacity: running ? 0.5 : 1 }}>
-          {running ? '▶ descendo...' : '▶ animar gradient descent'}
-        </button>
-        <span style={{ fontSize: 11, color: '#555', marginLeft: 8 }}>alvo: w1=3, w2=7</span>
+      <div style={{ padding: '4px 12px 12px', display: 'flex', flexDirection: 'column', gap: 6 }}>
+        <label style={{ fontSize: 11, color: '#555' }}>
+          x = <strong style={{ color: '#4fc3f7' }}>{px.toFixed(1)}</strong>
+        </label>
+        <input type="range" min={-2.5} max={2.5} step={0.1} value={px}
+          onChange={e => setPx(+e.target.value)}
+          style={{ width: '100%', accentColor: '#4fc3f7' }} />
+        <label style={{ fontSize: 11, color: '#555' }}>
+          y = <strong style={{ color: '#f44336' }}>{py.toFixed(1)}</strong>
+        </label>
+        <input type="range" min={-2.5} max={2.5} step={0.1} value={py}
+          onChange={e => setPy(+e.target.value)}
+          style={{ width: '100%', accentColor: '#f44336' }} />
       </div>
     </div>
   );
