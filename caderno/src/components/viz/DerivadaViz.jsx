@@ -68,7 +68,7 @@ export default function DerivadaViz() {
         <line
           x1={sx(Math.max(xMin, tx1))} y1={sy(Math.max(yMin, Math.min(yMax, ty1)))}
           x2={sx(Math.min(xMax, tx2))} y2={sy(Math.max(yMin, Math.min(yMax, ty2)))}
-          stroke="#f44336" strokeWidth="2" strokeDasharray="5 3"/>
+          stroke="#e66767" strokeWidth="2" strokeDasharray="5 3"/>
 
         {/* Triângulo mostrando a inclinação */}
         {triangleVisible && (
@@ -79,30 +79,30 @@ export default function DerivadaViz() {
             <text x={sx(x + runU/2)} y={sy(y0)+13} fill="#666" fontSize="9" textAnchor="middle">andou 1</text>
             {/* Linha vertical (rise) */}
             <line x1={sx(x+runU)} y1={sy(y0)} x2={sx(x+runU)} y2={sy(y0+riseU)}
-              stroke="#f44336" strokeWidth="2.5"/>
+              stroke="#e66767" strokeWidth="2.5"/>
             <text
               x={riseLabelX} y={(sy(y0)+sy(y0+riseU))/2+4}
-              fill="#f44336" fontSize="9" fontWeight="bold" textAnchor={riseLabelAnchor}>
+              fill="#e66767" fontSize="9" fontWeight="bold" textAnchor={riseLabelAnchor}>
               {riseU > 0 ? `↑ subiu ${riseU.toFixed(1)}` : `↓ desceu ${Math.abs(riseU).toFixed(1)}`}
             </text>
           </g>
         )}
 
         {/* Ponto */}
-        <circle cx={sx(x)} cy={sy(y0)} r="5" fill="#f44336" stroke="#0c0c0c" strokeWidth="2"/>
+        <circle cx={sx(x)} cy={sy(y0)} r="5" fill="#e66767" stroke="#0c0c0c" strokeWidth="2"/>
 
         {/* Label da derivada — caixa com largura generosa */}
         <rect x={PAD.left+1} y={PAD.top+1} width={148} height={38} rx="5"
-          fill="#0c0c0c" stroke="#f44336" strokeWidth="1.5"/>
+          fill="#0c0c0c" stroke="#e66767" strokeWidth="1.5"/>
         <text x={PAD.left+9} y={PAD.top+15} fill="#888" fontSize="9">inclinação da tangente:</text>
-        <text x={PAD.left+9} y={PAD.top+30} fill="#f44336" fontSize="12" fontWeight="bold">
+        <text x={PAD.left+9} y={PAD.top+30} fill="#e66767" fontSize="12" fontWeight="bold">
           f'({x.toFixed(1)}) = {slope.toFixed(2)}
         </text>
       </svg>
 
       <div style={{ padding: '4px 12px 12px' }}>
         <label style={{ fontSize: 11, color: '#555' }}>
-          arraste o ponto → x = <strong style={{ color: '#f44336' }}>{x.toFixed(2)}</strong>
+          arraste o ponto → x = <strong style={{ color: '#e66767' }}>{x.toFixed(2)}</strong>
         </label>
         <input type="range" min={-2.8} max={2.8} step={0.05} value={x}
           onChange={e => setX(+e.target.value)}

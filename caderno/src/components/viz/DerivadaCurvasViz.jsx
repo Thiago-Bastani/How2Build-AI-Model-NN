@@ -44,8 +44,8 @@ export default function DerivadaCurvasViz() {
         {/* ── BAIXO: f'(x) = 2x ── */}
         <line x1={PAD.left} x2={W-PAD.right} y1={syBot(0,-7,7)} y2={syBot(0,-7,7)} stroke="#2a2a2a" strokeWidth="1"/>
         <line x1={sxFn(0)} x2={sxFn(0)} y1={midY+18} y2={H-PAD.bottom} stroke="#2a2a2a" strokeWidth="1"/>
-        <path d={dfPath} fill="none" stroke="#f44336" strokeWidth="2.5"/>
-        <text x={PAD.left+4} y={midY+30} fill="#f44336" fontSize="10" fontWeight="bold">f'(x) = 2x</text>
+        <path d={dfPath} fill="none" stroke="#e66767" strokeWidth="2.5"/>
+        <text x={PAD.left+4} y={midY+30} fill="#e66767" fontSize="10" fontWeight="bold">f'(x) = 2x</text>
         <text x={PAD.left+4} y={midY+41} fill="#555" fontSize="9">a derivada — uma reta</text>
 
         {/* Labels eixo x (somente na curva de baixo) */}
@@ -55,11 +55,11 @@ export default function DerivadaCurvasViz() {
 
         {/* Linha vertical em x=2 mostrando correspondência */}
         <line x1={sxFn(2)} x2={sxFn(2)} y1={PAD.top} y2={H-PAD.bottom}
-          stroke="#4caf50" strokeWidth="1" strokeDasharray="3 2" opacity="0.6"/>
-        <circle cx={sxFn(2)} cy={syTop(4,0,9)} r="4" fill="#4caf50"/>
-        <circle cx={sxFn(2)} cy={syBot(4,-7,7)} r="4" fill="#4caf50"/>
-        <text x={sxFn(2)-6} y={syTop(4,0,9)-6} fill="#4caf50" fontSize="9" textAnchor="end">x=2: inclinação=4</text>
-        <text x={sxFn(2)-6} y={syBot(4,-7,7)+4} fill="#4caf50" fontSize="9" textAnchor="end">f'(2)=4 ✓</text>
+          stroke="#1baf7a" strokeWidth="1" strokeDasharray="3 2" opacity="0.6"/>
+        <circle cx={sxFn(2)} cy={syTop(4,0,9)} r="4" fill="#1baf7a"/>
+        <circle cx={sxFn(2)} cy={syBot(4,-7,7)} r="4" fill="#1baf7a"/>
+        <text x={sxFn(2)-6} y={syTop(4,0,9)-6} fill="#1baf7a" fontSize="9" textAnchor="end">x=2: inclinação=4</text>
+        <text x={sxFn(2)-6} y={syBot(4,-7,7)+4} fill="#1baf7a" fontSize="9" textAnchor="end">f'(2)=4 ✓</text>
       </svg>
     </div>
   );

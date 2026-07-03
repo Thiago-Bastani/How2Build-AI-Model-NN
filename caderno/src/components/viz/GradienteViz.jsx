@@ -17,7 +17,7 @@ const clampY = (v, pad = 4) => Math.max(PAD.top + pad,  Math.min(H - PAD.bottom 
 
 // f(x,y) = x² + 3y  →  curvas de nível: y = (c - x²)/3
 const LEVELS = [3, 6, 9, 12, 15];
-const COLORS  = ['#4caf50', '#81c784', '#4fc3f7', '#7c6af7', '#c06af7'];
+const COLORS  = ['#1baf7a', '#4fd39a', '#4fc3f7', '#7c6af7', '#c06af7'];
 
 function parabolaPath(c) {
   const pts = [];
@@ -74,7 +74,7 @@ export default function GradienteViz() {
             <path d="M0,0 L6,3 L0,6 Z" fill="#4fc3f7"/>
           </marker>
           <marker id="mk-gy"   markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
-            <path d="M0,0 L6,3 L0,6 Z" fill="#f44336"/>
+            <path d="M0,0 L6,3 L0,6 Z" fill="#e66767"/>
           </marker>
           <marker id="mk-grad" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
             <path d="M0,0 L6,3 L0,6 Z" fill="#fff"/>
@@ -109,9 +109,9 @@ export default function GradienteViz() {
 
         {/* Seta ∂f/∂y — move em y, comprimento = 3 (sempre igual!) */}
         <line x1={ox} y1={oy} x2={ox} y2={gyTipY}
-          stroke="#f44336" strokeWidth="2" markerEnd="url(#mk-gy)"/>
+          stroke="#e66767" strokeWidth="2" markerEnd="url(#mk-gy)"/>
         <text x={dyLabelX} y={(oy + gyTipY) / 2 + 4}
-          fill="#f44336" fontSize="9" textAnchor={dyAnchor}>∂f/∂y = 3</text>
+          fill="#e66767" fontSize="9" textAnchor={dyAnchor}>∂f/∂y = 3</text>
 
         {/* Seta do gradiente combinado */}
         <line x1={ox} y1={oy} x2={gradTipX} y2={gradTipY}
@@ -131,8 +131,8 @@ export default function GradienteViz() {
         <rect x={PAD.left+1} y={H-PAD.bottom-42} width={180} height={40} rx="4" fill="#0c0c0c" opacity="0.92"/>
         <circle cx={PAD.left+10} cy={H-PAD.bottom-30} r="3" fill="#4fc3f7"/>
         <text x={PAD.left+16} y={H-PAD.bottom-26} fill="#4fc3f7" fontSize="8">∂f/∂x = 2x — muda com o ponto</text>
-        <circle cx={PAD.left+10} cy={H-PAD.bottom-16} r="3" fill="#f44336"/>
-        <text x={PAD.left+16} y={H-PAD.bottom-12} fill="#f44336" fontSize="8">∂f/∂y = 3 — sempre igual (constante)</text>
+        <circle cx={PAD.left+10} cy={H-PAD.bottom-16} r="3" fill="#e66767"/>
+        <text x={PAD.left+16} y={H-PAD.bottom-12} fill="#e66767" fontSize="8">∂f/∂y = 3 — sempre igual (constante)</text>
       </svg>
 
       <div style={{ padding: '4px 12px 12px', display: 'flex', flexDirection: 'column', gap: 6 }}>
@@ -144,12 +144,12 @@ export default function GradienteViz() {
           onChange={e => setPx(+e.target.value)}
           style={{ width: '100%', accentColor: '#4fc3f7' }} />
         <label style={{ fontSize: 11, color: '#555' }}>
-          y = <strong style={{ color: '#f44336' }}>{py.toFixed(1)}</strong>
+          y = <strong style={{ color: '#e66767' }}>{py.toFixed(1)}</strong>
           <span style={{ color: '#666', marginLeft: 8, fontSize: 10 }}>∂f/∂y = 3 (não importa y)</span>
         </label>
         <input type="range" min={-0.5} max={5.5} step={0.1} value={py}
           onChange={e => setPy(+e.target.value)}
-          style={{ width: '100%', accentColor: '#f44336' }} />
+          style={{ width: '100%', accentColor: '#e66767' }} />
       </div>
     </div>
   );

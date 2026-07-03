@@ -27,17 +27,18 @@ function InlineText({ text }) {
   });
 }
 
-function Block({ block }) {
+function Block({ block, index }) {
+  const style = { '--stagger': Math.min(index, 10) };
   switch (block.type) {
-    case 'h1':      return <h1 className="l-h1"><InlineText text={block.text} /></h1>;
-    case 'h2':      return <h2 className="l-h2"><InlineText text={block.text} /></h2>;
-    case 'h3':      return <h3 className="l-h3"><InlineText text={block.text} /></h3>;
-    case 'p':       return <p  className="l-p" ><InlineText text={block.text} /></p>;
-    case 'note':    return <div className="l-note"><InlineText text={block.text} /></div>;
-    case 'warn':    return <div className="l-warn"><InlineText text={block.text} /></div>;
-    case 'formula': return <div className="l-formula"><code>{block.text}</code></div>;
+    case 'h1':      return <h1 className="l-h1" style={style}><InlineText text={block.text} /></h1>;
+    case 'h2':      return <h2 className="l-h2" style={style}><InlineText text={block.text} /></h2>;
+    case 'h3':      return <h3 className="l-h3" style={style}><InlineText text={block.text} /></h3>;
+    case 'p':       return <p  className="l-p" style={style}><InlineText text={block.text} /></p>;
+    case 'note':    return <div className="l-note l-reveal" style={style}><InlineText text={block.text} /></div>;
+    case 'warn':    return <div className="l-warn l-reveal" style={style}><InlineText text={block.text} /></div>;
+    case 'formula': return <div className="l-formula l-reveal" style={style}><code>{block.text}</code></div>;
     case 'formal':  return (
-      <div className="l-formal">
+      <div className="l-formal l-reveal" style={style}>
         <span className="l-formal-label">notação formal</span>
         <code className="l-formal-eq">{block.eq}</code>
         {block.legend && (
@@ -48,37 +49,30 @@ function Block({ block }) {
       </div>
     );
     case 'list':    return (
-      <ul className="l-list">
+      <ul className="l-list" style={style}>
         {block.items.map((item, i) => <li key={i}><InlineText text={item} /></li>)}
       </ul>
     );
     case 'divider': return <hr className="l-divider" />;
-    case 'code':    return <CodeBlock initial={block.code} />;
+    case 'code':    return <div className="l-reveal" style={style}><CodeBlock initial={block.code} /></div>;
+    case 'viz': {
+      const VizComp = VIZ_MAP[block.id];
+      if (!VizComp) return null;
+      return (
+        <div className="l-viz-inline l-reveal" style={style}>
+          <VizComp />
+        </div>
+      );
+    }
     default:        return null;
   }
-}
-
-// Cada segmento: blocos que ficam ao lado do viz que os acompanha.
-// O viz aparece à direita do texto que vem ANTES dele (quem o citou).
-function segmentBlocks(blocks) {
-  const segments = [];
-  let current = [];
-  for (const block of blocks) {
-    if (block.type === 'viz') {
-      segments.push({ blocks: current, vizId: block.id });
-      current = [];
-    } else {
-      current.push(block);
-    }
-  }
-  if (current.length > 0) segments.push({ blocks: current, vizId: null });
-  return segments;
 }
 
 function PrereqBanner({ meta, onNavigate }) {
   if (meta.prereqs.length === 0) return null;
   return (
     <div className="l-note prereq-banner">
+      <span className="prereq-icon">↳</span>
       Esta aula constrói sobre:{' '}
       {meta.prereqs.map((id, i) => {
         const m = getLessonMeta(id);
@@ -128,26 +122,12 @@ export default function Lesson({ lessonId, onNavigate }) {
     );
   }
 
-  const segments = segmentBlocks(blocks);
-
   return (
     <div className="lesson-outer">
       <PrereqBanner meta={meta} onNavigate={onNavigate} />
-      {segments.map((seg, i) => {
-        const VizComp = seg.vizId ? VIZ_MAP[seg.vizId] : null;
-        return (
-          <div key={i} className={VizComp ? 'lesson-row' : 'lesson-row lesson-row--full'}>
-            <article className="lesson">
-              {seg.blocks.map((b, j) => <Block key={j} block={b} />)}
-            </article>
-            {VizComp && (
-              <div className="lesson-viz-col">
-                <VizComp />
-              </div>
-            )}
-          </div>
-        );
-      })}
+      <article className="lesson">
+        {blocks.map((b, i) => <Block key={i} block={b} index={i} />)}
+      </article>
       <NavFooter meta={meta} onNavigate={onNavigate} />
     </div>
   );

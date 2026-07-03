@@ -18,7 +18,7 @@ export default function Sidebar({ active, onChange }) {
                   onClick={() => onChange(item.id)}
                   title={item.kind === 'code' ? 'aula de código' : item.kind === 'conceitual' ? 'aula conceitual' : 'aula de matemática'}
                 >
-                  <span className="sb-kind">{KIND_BADGE[item.kind] || ''}</span>
+                  <span className={`sb-kind sb-kind--${item.kind}`}>{KIND_BADGE[item.kind] || ''}</span>
                   <span className="sb-num">{String(i + 1).padStart(2, '0')}</span>
                   {item.title}
                 </button>

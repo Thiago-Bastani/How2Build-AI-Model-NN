@@ -27,4 +27,16 @@ export const blocks = [
     '`Σₖ` — soma sobre k (notação de somatório, vista na Matemática de Base) — é o produto escalar completo',
     'O k (o meio) tem que ser igual nos dois shapes',
   ]},
+
+  { type: 'h2', text: 'Fechando o ciclo: matriz aplicada a um vetor' },
+  { type: 'p', text: 'A aula anterior (Matrizes: Tabelas que Transformam) prometeu que uma matriz "pega um vetor de entrada e devolve outro vetor de saída". Um vetor é só uma matriz com uma única coluna — então multiplicar matriz por vetor é o mesmo produto de matrizes que você acabou de aprender, só que com `n=1` no shape de saída.' },
+  { type: 'p', text: 'Exemplo: a matriz `M = [[2, 0], [0, 3]]` aplicada ao vetor `v = [5, 4]` (escrito como coluna, `[[5], [4]]`) transforma esse vetor esticando a primeira coordenada por 2 e a segunda por 3:' },
+  { type: 'p', text: '`M·v = [[2×5 + 0×4], [0×5 + 3×4]] = [[10], [12]]`. O vetor `(5,4)` virou o vetor `(10,12)` — exatamente a transformação que a aula anterior prometeu, agora calculada com a mesma mecânica de linha-vezes-coluna do produto de matrizes.' },
+  { type: 'formal', eq: 'M · v,  onde v é uma matriz [n × 1]\n\n[m × n] · [n × 1] = [m × 1]', legend: [
+    '`v` — um vetor de n números, escrito como matriz-coluna (n linhas, 1 coluna)',
+    '`M · v` — mesma regra de sempre: cada célula do resultado é o produto escalar de uma linha de M com a (única) coluna de v',
+    'O resultado é outra matriz-coluna, com m números — o vetor transformado',
+  ]},
+
+  { type: 'note', text: 'Resumo geral da aula: produto de matrizes generaliza o produto escalar para calcular várias combinações lineares de uma vez — inclusive o caso particular de aplicar uma matriz a um único vetor, que é exatamente "transformar um vetor" como prometido na aula anterior. É essa mesma operação — `matMul` — que roda por trás de cada camada de uma rede neural, como você vai ver nas próximas trilhas.' },
 ];

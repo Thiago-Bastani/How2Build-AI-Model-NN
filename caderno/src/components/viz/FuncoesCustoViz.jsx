@@ -13,7 +13,7 @@ function sy(y) { return PAD.top  + plotH - ((y - yMin) / (yMax - yMin)) * plotH;
 const FUNCS = [
   { id: 'quad', label: 'f(x) = x²',     color: '#7c6af7', fn: x => x ** 2,        desc: 'curva em U (parábola)' },
   { id: 'lin',  label: 'f(x) = x + 1',  color: '#4fc3f7', fn: x => x + 1,         desc: 'linha reta — ritmo constante' },
-  { id: 'exp',  label: 'f(x) = eˣ − 1', color: '#f44336', fn: x => Math.E**x - 1, desc: 'devagar no início, explode no fim' },
+  { id: 'exp',  label: 'f(x) = eˣ − 1', color: '#e66767', fn: x => Math.E**x - 1, desc: 'devagar no início, explode no fim' },
 ];
 
 function makePath(fn) {
@@ -106,16 +106,16 @@ export default function FuncoesCustoViz() {
         )}
         {active === 'exp' && (
           <g>
-            <text x={sx(-1.5)} y={sy(0.8)} fill="#f44336" fontSize="9">devagar</text>
-            <text x={sx(-1.5)} y={sy(0.8)+11} fill="#f44336" fontSize="9">aqui...</text>
+            <text x={sx(-1.5)} y={sy(0.8)} fill="#e66767" fontSize="9">devagar</text>
+            <text x={sx(-1.5)} y={sy(0.8)+11} fill="#e66767" fontSize="9">aqui...</text>
             <line x1={sx(1.8)} y1={sy(yMax-0.5)} x2={sx(2.2)} y2={sy(yMax-0.5)}
-              stroke="#f44336" strokeWidth="1.5" markerEnd="url(#expArr)"/>
+              stroke="#e66767" strokeWidth="1.5" markerEnd="url(#expArr)"/>
             <defs>
               <marker id="expArr" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
-                <path d="M0,0 L6,3 L0,6 Z" fill="#f44336"/>
+                <path d="M0,0 L6,3 L0,6 Z" fill="#e66767"/>
               </marker>
             </defs>
-            <text x={W-PAD.right-3} y={sy(yMax-0.2)} fill="#f44336" fontSize="9" textAnchor="end">...explode aqui ↑</text>
+            <text x={W-PAD.right-3} y={sy(yMax-0.2)} fill="#e66767" fontSize="9" textAnchor="end">...explode aqui ↑</text>
           </g>
         )}
       </svg>

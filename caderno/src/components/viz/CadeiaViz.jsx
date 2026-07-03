@@ -17,7 +17,7 @@ const EXEMPLOS = [
     id: 'sin',
     label: 'sin(3x)',
     interior:  { fn: '3x',        deriv: "g'(x) = 3",       cor: '#4fc3f7' },
-    exterior:  { fn: 'sin(u)',    deriv: "f'(u) = cos(u)",  cor: '#f44336' },
+    exterior:  { fn: 'sin(u)',    deriv: "f'(u) = cos(u)",  cor: '#e66767' },
     linha1: "f'(g(x)) × g'(x)",
     linha2: '= cos(3x)  ×  3',
     resultado: '= 3·cos(3x)',
@@ -26,12 +26,12 @@ const EXEMPLOS = [
   {
     id: 'exp',
     label: 'e^(x²)',
-    interior:  { fn: 'x²',        deriv: "g'(x) = 2x",     cor: '#f44336' },
-    exterior:  { fn: 'e^(u)',      deriv: "f'(u) = e^(u)",  cor: '#4caf50' },
+    interior:  { fn: 'x²',        deriv: "g'(x) = 2x",     cor: '#e66767' },
+    exterior:  { fn: 'e^(u)',      deriv: "f'(u) = e^(u)",  cor: '#1baf7a' },
     linha1: "f'(g(x)) × g'(x)",
     linha2: '= e^(x²)  ×  2x',
     resultado: '= 2x·e^(x²)',
-    corRes: '#f44336',
+    corRes: '#e66767',
   },
 ];
 

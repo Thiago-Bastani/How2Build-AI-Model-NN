@@ -68,7 +68,7 @@ export default function MatrizViz() {
         {/* B */}
         <div>
           <div style={{ fontSize: 10, color: '#666', marginBottom: 4, textAlign: 'center' }}>B [2×2]</div>
-          <MatGrid data={B} hlCol={hlColB} color="#f44336" />
+          <MatGrid data={B} hlCol={hlColB} color="#e66767" />
         </div>
 
         <div style={{ color: '#555', fontSize: 20 }}>=</div>

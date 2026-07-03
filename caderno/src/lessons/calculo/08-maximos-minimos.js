@@ -17,7 +17,8 @@ export const blocks = [
     'Segunda derivada **positiva** no ponto crítico → concavidade pra cima → o ponto é um **mínimo**',
     'Segunda derivada **negativa** no ponto crítico → concavidade pra baixo → o ponto é um **máximo**',
   ]},
-  { type: 'p', text: 'Esse procedimento tem nome: o teste da segunda derivada. Existe também o teste da primeira derivada, que não precisa calcular a segunda derivada: você olha o sinal de `f\'(x)` um pouquinho antes e um pouquinho depois do ponto crítico. Se a inclinação passa de negativa (descendo) para positiva (subindo), é um vale — mínimo. Se passa de positiva pra negativa, é um pico — máximo. Se o sinal não muda dos dois lados, aquele ponto plano não é nem pico nem vale (é um ponto de inflexão, uma pausa momentânea antes de continuar no mesmo sentido).' },
+  { type: 'p', text: 'Esse procedimento tem nome: o teste da segunda derivada. Existe também o teste da primeira derivada, que não precisa calcular a segunda derivada: você olha o sinal de `f\'(x)` um pouquinho antes e um pouquinho depois do ponto crítico. Se a inclinação passa de negativa (descendo) para positiva (subindo), é um vale — mínimo. Se passa de positiva pra negativa, é um pico — máximo.' },
+  { type: 'p', text: 'Existe ainda um terceiro caso, quando o sinal da derivada não muda dos dois lados do ponto crítico: a curva achata por um instante (derivada zero), mas continua subindo (ou continua descendo) logo depois — não formou nem pico nem vale. Esse tipo de ponto tem nome próprio: **ponto de inflexão** — o lugar exato onde a concavidade da curva troca de sentido (de "sorriso" pra "cabeça baixa", ou vice-versa), sem que isso signifique máximo ou mínimo nenhum.' },
 
   { type: 'h2', text: 'Exemplo completo' },
   { type: 'p', text: 'Seja `f(x) = x² − 4x + 5`. Achar os pontos críticos e classificá-los.' },

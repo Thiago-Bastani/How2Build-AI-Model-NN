@@ -69,7 +69,8 @@ export const LESSONS = [
   { id: 'funcao-custo-loss',       sectionId: 'redes-neurais', title: 'Função de Custo (Loss)',              kind: 'math', prereqs: ['redes-densas-mlp', 'entropia-entropia-cruzada'] },
   { id: 'backpropagation',         sectionId: 'redes-neurais', title: 'Backpropagation',                    kind: 'math', prereqs: ['regra-da-cadeia', 'funcao-custo-loss'] },
   { id: 'backpropagation-autodiff', sectionId: 'redes-neurais', title: 'Backpropagation via Autodiff',      kind: 'code', prereqs: ['backpropagation', 'autodiff-implementado'], pairId: 'backpropagation' },
-  { id: 'treinar-modelo-completo', sectionId: 'redes-neurais', title: 'Treinando um Modelo Completo',       kind: 'code', prereqs: ['backpropagation-autodiff', 'mlp-codigo', 'gradient-descent-pratica'] },
+  { id: 'hiperparametros-treino',  sectionId: 'redes-neurais', title: 'Epoch, Batch e Overfitting',         kind: 'math', prereqs: ['funcao-custo-loss', 'preparar-dados', 'gradient-descent-algoritmo'] },
+  { id: 'treinar-modelo-completo', sectionId: 'redes-neurais', title: 'Treinando um Modelo Completo',       kind: 'code', prereqs: ['backpropagation-autodiff', 'mlp-codigo', 'hiperparametros-treino'], pairId: 'hiperparametros-treino' },
   { id: 'limites-redes-densas',    sectionId: 'redes-neurais', title: 'Por que Redes Densas Não Bastam para Tudo', kind: 'conceitual', prereqs: ['treinar-modelo-completo'] },
 
   // ── Trilha 7 — Arquiteturas Modernas ──────────────────────────────────────
