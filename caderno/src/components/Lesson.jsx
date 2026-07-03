@@ -5,6 +5,8 @@ import GradienteViz    from './viz/GradienteViz';
 import MatrizViz       from './viz/MatrizViz';
 import CadeiaViz       from './viz/CadeiaViz';
 import DerivadaCurvasViz from './viz/DerivadaCurvasViz';
+import CoordenadasViz from './viz/CoordenadasViz';
+import { getLessonBlocks, getLessonMeta, getAdjacent, markVisited } from '../lessons/curriculum';
 
 const VIZ_MAP = {
   'funcoes-custo':     FuncoesCustoViz,
@@ -13,6 +15,7 @@ const VIZ_MAP = {
   'gradiente':         GradienteViz,
   'produto-matriz':    MatrizViz,
   'cadeia':            CadeiaViz,
+  'coordenadas':       CoordenadasViz,
 };
 
 function InlineText({ text }) {
@@ -62,23 +65,74 @@ function segmentBlocks(blocks) {
   let current = [];
   for (const block of blocks) {
     if (block.type === 'viz') {
-      // fecha o segmento atual junto com este viz
       segments.push({ blocks: current, vizId: block.id });
       current = [];
     } else {
       current.push(block);
     }
   }
-  // texto restante após o último viz (ou tudo se não houver viz)
   if (current.length > 0) segments.push({ blocks: current, vizId: null });
   return segments;
 }
 
-export default function Lesson({ blocks }) {
+function PrereqBanner({ meta, onNavigate }) {
+  if (meta.prereqs.length === 0) return null;
+  return (
+    <div className="l-note prereq-banner">
+      Esta aula constrói sobre:{' '}
+      {meta.prereqs.map((id, i) => {
+        const m = getLessonMeta(id);
+        return (
+          <span key={id}>
+            <button className="prereq-link" onClick={() => onNavigate(id)}>{m ? m.title : id}</button>
+            {i < meta.prereqs.length - 1 ? ', ' : ''}
+          </span>
+        );
+      })}
+      .
+    </div>
+  );
+}
+
+function NavFooter({ meta, onNavigate }) {
+  const { prev, next } = getAdjacent(meta.id);
+  return (
+    <div className="lesson-nav-footer">
+      {prev ? (
+        <button className="lesson-nav-btn" onClick={() => onNavigate(prev.id)}>← {prev.title}</button>
+      ) : <span />}
+      {next ? (
+        <button className="lesson-nav-btn lesson-nav-btn--next" onClick={() => onNavigate(next.id)}>{next.title} →</button>
+      ) : <span />}
+    </div>
+  );
+}
+
+export default function Lesson({ lessonId, onNavigate }) {
+  const meta = getLessonMeta(lessonId);
+  const blocks = getLessonBlocks(lessonId);
+
+  if (!meta) return null;
+
+  markVisited(lessonId);
+
+  if (!blocks) {
+    return (
+      <div className="lesson-outer">
+        <article className="lesson">
+          <h1 className="l-h1">{meta.title}</h1>
+          <div className="l-note">Esta aula ainda está em construção — faz parte do roadmap do currículo, mas o conteúdo ainda não foi escrito.</div>
+        </article>
+        <NavFooter meta={meta} onNavigate={onNavigate} />
+      </div>
+    );
+  }
+
   const segments = segmentBlocks(blocks);
 
   return (
     <div className="lesson-outer">
+      <PrereqBanner meta={meta} onNavigate={onNavigate} />
       {segments.map((seg, i) => {
         const VizComp = seg.vizId ? VIZ_MAP[seg.vizId] : null;
         return (
@@ -94,6 +148,7 @@ export default function Lesson({ blocks }) {
           </div>
         );
       })}
+      <NavFooter meta={meta} onNavigate={onNavigate} />
     </div>
   );
 }

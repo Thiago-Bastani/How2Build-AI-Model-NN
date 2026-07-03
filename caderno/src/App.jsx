@@ -1,31 +1,12 @@
 import { useState } from 'react';
 import Sidebar from './components/Sidebar';
 import Lesson  from './components/Lesson';
-
-import { funcoes }        from './lessons/calculo/01-funcoes';
-import { derivada }       from './lessons/calculo/02-derivada';
-import { gradiente }      from './lessons/calculo/03-gradiente';
-import { produtoMatrizes} from './lessons/calculo/04-produto-matrizes';
-import { regraDaCadeia }  from './lessons/calculo/05-regra-da-cadeia';
-import { tensores }        from './lessons/01-tensores';
-import { prepararDados }   from './lessons/02-preparar-dados';
-import { construirModelo } from './lessons/03-modelo';
+import { getFlatOrder } from './lessons/curriculum';
 
 import './App.css';
 
-const LESSONS = {
-  'funcoes':          funcoes,
-  'derivada':         derivada,
-  'gradiente':        gradiente,
-  'produto-matrizes': produtoMatrizes,
-  'regra-da-cadeia':  regraDaCadeia,
-  'tensores':         tensores,
-  'preparar-dados':   prepararDados,
-  'construir-modelo': construirModelo,
-};
-
 export default function App() {
-  const [active, setActive] = useState('funcoes');
+  const [active, setActive] = useState(getFlatOrder()[0]);
 
   return (
     <div className="app">
@@ -38,7 +19,7 @@ export default function App() {
 
         <main className="content">
           <div className="lesson-col" key={active}>
-            <Lesson blocks={LESSONS[active]} />
+            <Lesson lessonId={active} onNavigate={setActive} />
           </div>
         </main>
       </div>

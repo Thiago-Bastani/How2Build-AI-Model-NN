@@ -1,11 +1,7 @@
-export const produtoMatrizes = [
+export const blocks = [
   { type: 'h1', text: 'Produto de Matrizes' },
   { type: 'p', text: 'Você tem 3 turmas de alunos e 2 provas. Cada turma tem uma nota em cada prova. Isso é uma tabela 3×2 — 3 linhas (turmas), 2 colunas (provas).' },
-  { type: 'p', text: 'Agora você quer calcular a nota final de cada turma, onde a prova 1 vale 60% e a prova 2 vale 40%. Você multiplica cada nota pelo peso correspondente e soma. Isso é o **produto escalar** — e é exatamente o que o produto de matrizes faz, só que pra todas as combinações de uma vez.' },
-
-  { type: 'h2', text: 'Produto escalar primeiro' },
-  { type: 'p', text: 'Dados dois vetores do mesmo tamanho: multiplica posição a posição e soma tudo. `[1, 2, 3] · [4, 5, 6] = 1×4 + 2×5 + 3×6 = 32`. O resultado é um número só.' },
-  { type: 'p', text: 'É a operação mais básica. O produto de matrizes inteiro é construído em cima disso.' },
+  { type: 'p', text: 'Agora você quer calcular a nota final de cada turma, onde a prova 1 vale 60% e a prova 2 vale 40%. Você multiplica cada nota pelo peso correspondente e soma. Isso é o **produto escalar**, que você já viu na aula de Operações com Vetores — e é exatamente o que o produto de matrizes faz, só que pra todas as combinações de uma vez.' },
 
   { type: 'h2', text: 'Como calcular o produto de matrizes' },
   { type: 'p', text: 'Cada célula do resultado vem de: **pega a linha da esquerda, pega a coluna da direita, faz o produto escalar**.' },
@@ -28,17 +24,7 @@ export const produtoMatrizes = [
     '`Cᵢⱼ` — célula na linha i, coluna j do resultado',
     '`Aᵢₖ` — percorre a linha i de A',
     '`Bₖⱼ` — percorre a coluna j de B',
-    '`Σₖ` — soma sobre k — é o produto escalar completo',
+    '`Σₖ` — soma sobre k (notação de somatório, vista na Matemática de Base) — é o produto escalar completo',
     'O k (o meio) tem que ser igual nos dois shapes',
   ]},
-
-  { type: 'h2', text: 'Ver na prática' },
-  { type: 'code', code:
-`const A = tf.tensor2d([[1, 2], [3, 4]]);
-const B = tf.tensor2d([[5, 6], [7, 8]]);
-
-print('A:');     A.print();
-print('B:');     B.print();
-print('A·B:');   A.matMul(B).print();
-print('B·A (diferente!):'); B.matMul(A).print();` },
 ];

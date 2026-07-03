@@ -1,6 +1,6 @@
 # Guia de Como Escrever Lições
 
-Este arquivo documenta as regras de como escrever lições neste caderno.  
+Este arquivo documenta as regras de como escrever lições neste caderno.
 Leia isso antes de criar ou editar qualquer lição.
 
 ---
@@ -9,63 +9,78 @@ Leia isso antes de criar ou editar qualquer lição.
 
 O objetivo é **transformar leigo em mestre** — não assumir que o leitor já sabe nada, mas também não subestimar a capacidade dele de entender as coisas difíceis quando bem explicadas.
 
-O leitor é alguém que nunca estudou o assunto. A jornada é:
+O leitor é alguém que nunca estudou o assunto, e chega sabendo só matemática básica (somar, multiplicar, dividir, potência, variável) e programação básica (lógica, operadores, funções). A jornada é:
 
 ```
-entendimento humano  →  entendimento formal
+entendimento humano  →  entendimento formal/técnico completo
 ```
 
-Nunca o contrário.
+Nunca o contrário. E nunca uma versão diluída do lado formal — o salto tem que ser completo.
 
 ---
 
-## Estrutura obrigatória de cada lição
+## Regra 1 — Leigo → Expert (duas fases, não uma sequência intercalada)
 
-### 1. Comece com algo do mundo real
+Cada lição tem exatamente **duas fases**, nessa ordem, sem alternar entre elas:
 
-A primeira coisa que o leitor vê deve ser uma situação que ele já conhece.  
-Sem jargão. Sem símbolo. Sem definição técnica.
+**Fase Leigo**
+- Começa com uma situação do mundo real que o leitor já reconhece. Sem jargão, sem símbolo, sem definição técnica.
+- Explica o **porquê** o conceito existe e **que problema** ele resolve, ligando com o que o leitor já sabe.
+- Zero notação formal nesta fase.
 
-**Bom:**
+**Fase Expert**
+- O tratamento formal/técnico **completo** do assunto: notação, regras, derivações e provas onde existirem.
+- Não é um resumo do lado leigo com símbolos em cima — é o conteúdo real, no nível de um curso de verdade sobre aquele tema (ver Regra 3).
+- É aqui que a notação formal aparece, sempre desmontada linha a linha (ver seção "Notação formal" abaixo).
+
+**Bom (fase leigo):**
 > "Você está de olhos vendados numa colina e quer chegar ao vale. Não dá pra ver nada — mas dá pra sentir o chão inclinando sob seus pés."
 
-**Ruim:**
+**Ruim (formal aparecendo cedo demais, sem a fase leigo antes):**
 > "A derivada é definida como o limite da razão incremental quando o incremento tende a zero."
 
----
-
-### 2. Explique o conceito em palavras simples
-
-Após a analogia, explique o que o conceito **é** e **por que existe**.  
-Foque no **porquê** antes do **o quê**.
-
-Perguntas que a explicação deve responder:
-- Por que esse conceito existe? Qual problema ele resolve?
-- O que aconteceria se ele não existisse?
-- Como ele se conecta com o que o leitor já sabe?
+O "brilho" de aprender vem do salto limpo de um lado pro outro — a sensação de "agora eu decifro esse símbolo que parecia assustador" — não de ficar alternando leigo/formal/leigo/formal em pedacinhos.
 
 ---
 
-### 3. Nunca remova a explicação simples ao adicionar a formal
+## Regra 2 — Código só existe em aula de código
 
-Quando a notação formal for adicionada, a explicação leiga **permanece**.  
-As duas sempre juntas, nessa ordem. Uma não substitui a outra.
+Uma aula é **ou** uma aula de matemática/teoria **ou** uma aula de código — nunca as duas coisas.
 
-**Estrutura típica de um parágrafo com notação formal:**
+- Uma aula de matemática (derivada, gradiente, probabilidade, softmax como conceito, atenção como mecanismo, etc.) tem **zero blocos `code`**. Ela termina na fase Expert formal, sem "ver na prática".
+- Uma aula de código existe **separadamente**, como par da aula de matemática, dedicada a implementar o que a aula-irmã já ensinou — sem re-explicar a teoria do zero. Ela pode (e deve) referenciar a aula de matemática irmã ("já vimos por que isso funciona; aqui é só código").
+- Essa separação vale para qualquer área do caderno, não só matemática: uma aula de hardware é só hardware, uma aula de física é só física.
 
-```
-[texto leigo explicando com palavras]
-[texto leigo com a conta em português: "(chutou - certo)²"]
-{ type: 'formal', eq: 'L(ŷ, y) = (ŷ − y)²', legend: [...] }
-```
+Isso também estrutura o currículo em **pares**: sempre que um conceito tem lado matemático e lado de implementação (gradient descent, autodiff, backpropagation, normalização, atenção, Mixture of Experts), existem duas lições — uma teórica, uma de código — lado a lado no currículo (`curriculum.js`), linkadas por `pairId`.
 
 ---
 
-### 4. Notação formal: sempre no final, sempre desmontada
+## Regra 3 — Profundidade completa por assunto
 
-O bloco `formal` é o destino, não o ponto de partida.  
-Ele aparece **depois** que o leitor já entende o conceito.  
-Cada símbolo da notação é explicado linha a linha no `legend`.
+Se o título da aula promete um assunto, a aula ensina o assunto **inteiro**, no nível de um curso de verdade sobre aquele tema — nunca uma fatia recortada só para o que a IA usa depois.
+
+Exemplo: uma aula chamada "Derivada" ensina a derivar de verdade — definição via limite, regras de derivação (soma, produto, quociente, potência, cadeia), derivadas de funções comuns (exponencial, logaritmo) — não só o mínimo necessário pra entender gradient descent. O mesmo vale para qualquer trilha (álgebra linear, probabilidade, trigonometria etc.).
+
+Consequência prática: é normal e esperado que um tópico vire **várias aulas** em vez de uma só, se o assunto de verdade tiver várias partes (ex.: "Cálculo" não é uma aula, é uma trilha inteira com Limites, Derivada, Regras de Derivação, Regra da Cadeia, etc., cada uma completa em si mesma).
+
+---
+
+## Regra 4 — Fechamento por citação (regra viva, aplicada durante a redação)
+
+Se o texto de uma aula **cita um conceito pelo nome** — um termo técnico real, não uma analogia solta (ex.: "GPU", "seno", "token", "ponto flutuante" contam; "hospital com médicos" como analogia não conta) — esse conceito precisa ter sua **própria aula** em algum lugar do currículo.
+
+Ao escrever uma aula nova:
+1. Releia o texto procurando qualquer termo técnico citado que ainda não tem aula própria em `curriculum.js`.
+2. Se encontrar, adicione uma aula para ele (na trilha que fizer sentido — matemática, código, ou uma trilha nova em `fundamentos-complementares/` se for hardware/física/linguística/etc.) antes de considerar a aula atual "fechada".
+3. Se um termo for citado apenas de passagem sem necessidade real (ex.: o nome próprio de uma arquitetura famosa, só como curiosidade final), evite introduzi-lo como conceito técnico novo — ou aceite o compromisso de lhe dar uma aula.
+
+Essa auditoria é o que garante que ninguém sai do caderno com um "buraco" de vocabulário não explicado.
+
+---
+
+## Notação formal: sempre no final da fase Expert, sempre desmontada
+
+O bloco `formal` é o destino da fase Expert, nunca o ponto de partida dela. Cada símbolo é explicado linha a linha no `legend`.
 
 ```js
 { type: 'formal', eq: 'L(ŷ, y) = (ŷ − y)²', legend: [
@@ -80,35 +95,11 @@ Mostre a notação monstruosa. Não a esconda. Mas desmonte-a completamente.
 
 ---
 
-### 5. Código aparece por último
-
-O bloco de código é rotulado mentalmente como "ver na prática".  
-Ele nunca é o principal — é a cereja do bolo.  
-Um por lição, no máximo dois.
-
----
-
-### 6. Sequência de blocos em cada seção
-
-```
-leigo → leigo → leigo → [formal] → leigo → leigo → [formal] → código
-```
-
-Nunca:
-- `[formal]` sem leigo antes
-- leigo substituído por formal
-- código antes da explicação
-
----
-
 ## Regras para os desenhos (visualizações)
 
 ### Lei principal: o desenho deve explicar exatamente o que há no texto
 
 Se o gráfico não tem nada a ver com o que o texto cita visualmente, está errado. Ex.: Função quadrática é usada por causa de sua curva (Grafico DEVE TER LEGENDA EXPLICANDO DO QUE SE TRATA AQUELA CURVA, EM QUAL COR ESTÁ, SETA APONTANDO PRA ELA, ETC. não adianta só colocar a função quadrática desenhada. tem que explicitar o que está escrito no texto.)
-
-
----
 
 ### Cada elemento visual precisa de um nome no próprio desenho
 
@@ -124,8 +115,6 @@ Toda curva, ponto, linha, seta ou área deve ter um label dentro do SVG explican
 - `"você está aqui"` com seta apontando pro ponto
 - `"DERIVADA = quanto sobe ÷ quanto anda"` em destaque
 
----
-
 ### O conceito principal aparece nomeado e destacado no gráfico
 
 O título do gráfico não basta. O **próprio elemento que representa o conceito** deve estar rotulado dentro do desenho.
@@ -134,8 +123,6 @@ Exemplos:
 - Na derivada: a linha tangente deve dizer `"linha tangente = a derivada aqui"`
 - No gradiente: a seta deve dizer `"↑ gradiente (sobe mais rápido aqui)"`
 - Na função de custo: o mínimo deve dizer `"erro zero — previsão perfeita"`
-
----
 
 ### Mostre a conta visualmente, não só o resultado
 
@@ -146,14 +133,10 @@ Se o texto diz "inclinação = subiu ÷ andou", o desenho mostra o triângulo co
 
 Não mostre só o número. Mostre de onde ele vem.
 
----
-
 ### Labels em português, sempre
 
-Eixos, pontos, setas — tudo em português com contexto.  
+Eixos, pontos, setas — tudo em português com contexto.
 Não `"x"` — coloque `"pesos"`, `"previsão"`, `"erro"` conforme o conceito.
-
----
 
 ### Texto de estado em palavras abaixo do gráfico
 
@@ -164,12 +147,12 @@ Todo visualizador interativo tem um texto que descreve em português o que está
 "⬤ no mínimo — derivada zero, treino para aqui"
 ```
 
----
-
 ### Interatividade com propósito
 
-Sliders e botões existem pra deixar o leitor explorar o conceito, não pra enfeitar.  
+Sliders e botões existem pra deixar o leitor explorar o conceito, não pra enfeitar.
 Cada controle tem um label claro: `"arraste o ponto"`, `"animar gradient descent"`.
+
+Visualizações só aparecem em aulas de matemática/teoria (fase Expert), nunca substituem o bloco `code` de uma aula de código.
 
 ---
 
@@ -187,6 +170,8 @@ Nunca use esses termos sem antes explicá-los em português simples:
 | epoch | "uma passagem completa pelo dataset" |
 | overfitting | "decorou os exemplos, não aprendeu o padrão" |
 
+Esta tabela cresce conforme novos termos técnicos entram no caderno (ver Regra 4) — todo termo aqui deve, além de ter uma introdução leiga na aula onde aparece pela primeira vez, também ter sua própria aula em algum lugar do currículo.
+
 ---
 
 ## Tipos de bloco disponíveis
@@ -199,21 +184,23 @@ Nunca use esses termos sem antes explicá-los em português simples:
 { type: 'note', text: '...' }         // caixa azul — resumo ou dica
 { type: 'warn', text: '...' }         // caixa amarela — atenção / erro comum
 { type: 'formula', text: '...' }      // fórmula centralizada em destaque
-{ type: 'formal', eq: '...', legend: ['...'] }  // notação acadêmica desmontada
+{ type: 'formal', eq: '...', legend: ['...'] }  // notação acadêmica desmontada — só em aula de matemática
 { type: 'list', items: ['...'] }      // lista com marcadores
 { type: 'divider' }                   // linha separadora
-{ type: 'code', code: '...' }         // terminal rodável com tf e print() disponíveis
+{ type: 'viz', id: '...' }            // visualização interativa — só em aula de matemática
+{ type: 'code', code: '...' }         // terminal rodável com tf e print() disponíveis — só em aula de código
 ```
 
 ---
 
 ## Checklist antes de publicar uma lição
 
-- [ ] A primeira frase é uma analogia do mundo real?
+- [ ] A primeira frase da fase Leigo é uma analogia do mundo real, sem símbolo nenhum?
 - [ ] O "porquê" do conceito está explicado antes do "o quê"?
-- [ ] Cada conta aparece primeiro em português simples antes da notação formal?
+- [ ] A fase Expert cobre o assunto **inteiro** prometido pelo título, não uma fatia recortada?
 - [ ] O bloco `formal` tem todos os símbolos explicados no `legend`?
-- [ ] O desenho mostra o conceito visualmente (não só o resultado)?
-- [ ] O desenho tem labels em português e texto de estado em palavras?
-- [ ] O código é o último bloco da lição (ou da seção)?
+- [ ] Se é aula de matemática: **zero** blocos `code`?
+- [ ] Se é aula de código: nenhuma teoria nova sendo introduzida, só implementação do que a aula-irmã já ensinou?
+- [ ] O desenho (se houver) mostra o conceito visualmente, com labels em português e texto de estado?
+- [ ] Todo termo técnico citado no texto já tem (ou ganhou agora) uma aula própria em algum lugar do currículo?
 - [ ] Nenhum jargão aparece sem definição prévia?
