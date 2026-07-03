@@ -7,8 +7,9 @@ import { derivada }       from './lessons/calculo/02-derivada';
 import { gradiente }      from './lessons/calculo/03-gradiente';
 import { produtoMatrizes} from './lessons/calculo/04-produto-matrizes';
 import { regraDaCadeia }  from './lessons/calculo/05-regra-da-cadeia';
-import { tensores }       from './lessons/01-tensores';
-import { prepararDados }  from './lessons/02-preparar-dados';
+import { tensores }        from './lessons/01-tensores';
+import { prepararDados }   from './lessons/02-preparar-dados';
+import { construirModelo } from './lessons/03-modelo';
 
 import './App.css';
 
@@ -20,6 +21,7 @@ const LESSONS = {
   'regra-da-cadeia':  regraDaCadeia,
   'tensores':         tensores,
   'preparar-dados':   prepararDados,
+  'construir-modelo': construirModelo,
 };
 
 export default function App() {

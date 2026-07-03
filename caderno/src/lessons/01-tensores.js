@@ -1,10 +1,11 @@
 export const tensores = [
   { type: 'h1', text: 'Tensores & a Matemática de ML' },
-  { type: 'p', text: 'Antes de montar uma rede neural, você precisa entender a unidade básica de tudo em ML: o **tensor**. E a operação mais importante: o **gradiente**.' },
+  { type: 'p', text: 'Pensa numa planilha do Excel. Uma célula isolada é um número só. Uma linha de células é uma lista de valores — os preços de cada produto, por exemplo. A planilha inteira é uma grade: linhas por colunas. E se você empilhar várias planilhas uma sobre a outra, como páginas de um caderno? Você tem um bloco tridimensional de números. Isso é exatamente o que é um **tensor** — um jeito de organizar números em diferentes dimensões. A palavra intimida, mas o conceito você já usa todo dia.' },
+  { type: 'p', text: 'Em ML, tudo passa por tensores: as imagens que a rede processa, os pesos que ela aprende, os erros que ela calcula. Entender tensores é entender o idioma do TensorFlow.' },
 
   // ── Tensores ──────────────────────────────────────────────────────────────
   { type: 'h2', text: 'O que é um Tensor?' },
-  { type: 'p', text: 'Tensor é só um array N-dimensional. A palavra assusta mas o conceito é simples:' },
+  { type: 'p', text: 'Tensor é um array N-dimensional. Cada "nível" a mais de dimensão é uma nova forma de organizar os dados:' },
   { type: 'list', items: [
     '**Escalar (0D)** — um número: `42`',
     '**Vetor (1D)** — um array: `[1, 2, 3]`',

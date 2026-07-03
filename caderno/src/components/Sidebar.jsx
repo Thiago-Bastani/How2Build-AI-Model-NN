@@ -14,8 +14,9 @@ const SECTIONS = [
     id: 'ml',
     label: 'ML',
     items: [
-      { id: 'tensores',      label: '01 — Tensores' },
-      { id: 'preparar-dados', label: '02 — Preparar Dados' },
+      { id: 'tensores',         label: '01 — Tensores' },
+      { id: 'preparar-dados',   label: '02 — Preparar Dados' },
+      { id: 'construir-modelo', label: '03 — Construir um Modelo' },
     ],
   },
 ];

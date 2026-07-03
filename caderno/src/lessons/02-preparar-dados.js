@@ -1,6 +1,7 @@
 export const prepararDados = [
   { type: 'h1', text: 'Preparação de Dados' },
-  { type: 'p', text: 'Dados brutos raramente estão prontos pra entrar numa rede neural. Esta etapa — chamada de **pré-processamento** ou **feature engineering** — pode ser a diferença entre um modelo que aprende e um que falha.' },
+  { type: 'p', text: 'Imagina que você recebe uma lista com o desempenho de corredores, mas cada um usou uma unidade diferente: uns mediram em km/h, outros em minutos por milha, um mediu em "passos por segundo". Você tenta comparar e não consegue — os números não falam a mesma língua. Uma rede neural tem exatamente esse problema quando os dados chegam crus.' },
+  { type: 'p', text: 'Preparar os dados é o trabalho de colocar tudo na mesma língua antes de jogar na rede. A literatura chama isso de **pré-processamento** — mas o conceito é simples: limpar, padronizar e organizar. Essa etapa costuma fazer mais diferença no resultado final do que a arquitetura da rede.' },
 
   // ── Por que preparar ──────────────────────────────────────────────────────
   { type: 'h2', text: 'Por que isso importa?' },
